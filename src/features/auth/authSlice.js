@@ -6,6 +6,7 @@ const initialState = {
   token: sessionStorage.getItem("token") || null,
   loading: false,
   error: null,
+  success: null,
 };
 
 const authSlice = createSlice({
@@ -17,9 +18,11 @@ const authSlice = createSlice({
       .addCase(loginThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.success = null;
       })
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
+        state.success = payload;
         state.token = payload.data.token;
         sessionStorage.setItem("token", payload.data.token);
       })

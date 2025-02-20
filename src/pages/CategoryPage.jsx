@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { categoriesThunk } from "../features/category/categoryThunks";
+import {
+  categoriesThunk,
+  createCategoryThunk,
+} from "../features/category/categoryThunks";
 
 const CategoryPage = () => {
   const dispatch = useDispatch();
@@ -13,23 +16,25 @@ const CategoryPage = () => {
     dispatch(categoriesThunk(page));
   };
 
+  const handleSubmit = () => {
+    dispatch(createCategoryThunk());
+  };
+
   useEffect(() => {
     dispatch(categoriesThunk(currentPage));
   }, []);
 
   return (
     <>
-      <table className="w-full text-left border border-gray-200">
+      <table className="w-full text-center border border-gray-200">
         <thead>
           <tr>
-            <th className="p-2 border-b">ID</th>
             <th className="p-2 border-b">Name</th>
           </tr>
         </thead>
         <tbody>
           {category.map((item) => (
             <tr key={item.id}>
-              <td className="p-2 border-b">{item.id}</td>
               <td className="p-2 border-b">{item.name}</td>
             </tr>
           ))}
