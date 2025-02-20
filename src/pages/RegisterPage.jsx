@@ -9,7 +9,8 @@ import PasswordInput from "../components/PasswordInput";
 const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { token, loading } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.profile);
   const [credentials, setCredentials] = useState({
     email: "",
     name: "",
@@ -60,8 +61,8 @@ const RegisterPage = () => {
   };
 
   useEffect(() => {
-    if (token) navigate("/");
-  }, [token, navigate]);
+    if (user) navigate("/");
+  }, [user, navigate]);
 
   return (
     <div

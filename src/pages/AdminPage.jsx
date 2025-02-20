@@ -3,12 +3,12 @@ import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
-const DashboardPage = () => {
+const AdminPage = () => {
   const { user } = useSelector((state) => state.profile);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user?.role === "admin") navigate("/admin");
+    if (user?.role === "user") navigate("/");
   }, [user, navigate]);
 
   return (
@@ -18,4 +18,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default AdminPage;

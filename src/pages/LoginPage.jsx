@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginThunk } from "../features/auth/authThunks";
+import { myProfileThunk } from "../features/profile/profileThunks";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginBackground } from "../assets";
@@ -9,7 +10,8 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { token, loading } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.profile);
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -30,9 +32,7 @@ const LoginPage = () => {
           transition: Bounce,
         });
 
-        setTimeout(() => {
-          navigate("/");
-        }, 3000);
+        dispatch(myProfileThunk());
       })
       .catch((response) =>
         toast(response.message, {
@@ -50,8 +50,8 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    if (token) navigate("/");
-  }, [token, navigate]);
+    if (user) navigate("/");
+  }, [user, navigate]);
 
   return (
     <div
