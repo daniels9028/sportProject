@@ -5,8 +5,6 @@ import { loginThunk, registerThunk, logoutThunk } from "./authThunks";
 const initialState = {
   token: sessionStorage.getItem("token") || null,
   loading: false,
-  error: null,
-  success: null,
 };
 
 const authSlice = createSlice({
@@ -17,41 +15,34 @@ const authSlice = createSlice({
     builder
       .addCase(loginThunk.pending, (state) => {
         state.loading = true;
-        state.error = null;
         state.success = null;
       })
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.success = payload;
         state.token = payload.data.token;
         sessionStorage.setItem("token", payload.data.token);
       })
-      .addCase(loginThunk.rejected, (state, { payload }) => {
+      .addCase(loginThunk.rejected, (state) => {
         state.loading = false;
-        state.error = payload;
       })
       .addCase(registerThunk.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(registerThunk.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(registerThunk.rejected, (state, { payload }) => {
+      .addCase(registerThunk.rejected, (state) => {
         state.loading = false;
-        state.error = payload;
       })
       .addCase(logoutThunk.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(logoutThunk.fulfilled, (state) => {
         state.loading = false;
         sessionStorage.removeItem("token");
       })
-      .addCase(logoutThunk.rejected, (state, { payload }) => {
+      .addCase(logoutThunk.rejected, (state) => {
         state.loading = false;
-        state.error = payload;
       });
   },
 });

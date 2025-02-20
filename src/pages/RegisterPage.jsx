@@ -1,21 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginThunk } from "../features/auth/authThunks";
+import { registerThunk } from "../features/auth/authThunks";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginBackground } from "../assets";
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import PasswordInput from "../components/PasswordInput";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token, loading } = useSelector((state) => state.auth);
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
+  const [credentials, setCredentials] = useState({
+    email: "",
+    name: "",
+    password: "",
+    c_password: "",
+    role: "user",
+    phone_number: "",
+  });
+
+  const handleChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginThunk(credentials))
+    dispatch(registerThunk(credentials))
       .unwrap()
       .then((response) => {
         toast(response.message, {
@@ -31,7 +41,7 @@ const LoginPage = () => {
         });
 
         setTimeout(() => {
-          navigate("/");
+          navigate("/login");
         }, 3000);
       })
       .catch((response) =>
@@ -55,7 +65,7 @@ const LoginPage = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gray-100 bg-cover bg-center px-4"
+      className="min-h-screen flex items-center justify-center bg-gray-100 bg-cover bg-center p-4"
       style={{
         backgroundImage: `url(${loginBackground})`,
       }}
@@ -66,37 +76,49 @@ const LoginPage = () => {
         className="p-8 bg-white border-2 border-black shadow-none w-full max-w-md backdrop-blur-md bg-opacity-80"
       >
         <h2 className="text-4xl font-extrabold mb-6 text-black uppercase tracking-wider text-center border-b-2 border-black pb-4">
-          Login
+          Register
         </h2>
         <input
           type="email"
           placeholder="Email"
+          name="email"
           value={credentials.email}
-          onChange={(e) =>
-            setCredentials({ ...credentials, email: e.target.value })
-          }
+          onChange={handleChange}
           className="w-full p-3 mb-4 border-2 border-black bg-transparent placeholder-black text-black font-mono text-lg focus:outline-none"
           required
         />
-        <div className="relative w-full mb-4">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={credentials.password}
-            onChange={(e) =>
-              setCredentials({ ...credentials, password: e.target.value })
-            }
-            className="w-full p-3 border-2 border-black bg-transparent placeholder-black text-black font-mono text-lg focus:outline-none"
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute inset-y-0 right-3 flex items-center text-sm text-black font-bold underline"
-          >
-            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-          </button>
-        </div>
+        <input
+          type="text"
+          placeholder="Name"
+          name="name"
+          value={credentials.name}
+          onChange={handleChange}
+          className="w-full p-3 mb-4 border-2 border-black bg-transparent placeholder-black text-black font-mono text-lg focus:outline-none"
+          required
+        />
+        <PasswordInput
+          credentials={credentials}
+          handleChange={handleChange}
+          name="password"
+          value={credentials.password}
+          placeholder="Password"
+        />
+        <PasswordInput
+          credentials={credentials}
+          handleChange={handleChange}
+          name="c_password"
+          value={credentials.c_password}
+          placeholder="Confirmation Password"
+        />
+        <input
+          type="number"
+          placeholder="Phone Number"
+          name="phone_number"
+          value={credentials.phone_number}
+          onChange={handleChange}
+          className="w-full p-3 mb-4 border-2 border-black bg-transparent placeholder-black text-black font-mono text-lg focus:outline-none"
+          required
+        />
         <button
           type="submit"
           disabled={loading}
@@ -105,12 +127,9 @@ const LoginPage = () => {
           {loading ? "Loading..." : "Login"}
         </button>
         <div className="text-center mt-4 text-lg">
-          <p>Don't have account?</p>{" "}
-          <Link
-            to="/register"
-            className="text-blue-500 cursor-pointer underline"
-          >
-            Register here!
+          <p>Already have account?</p>{" "}
+          <Link to="/login" className="text-blue-500 cursor-pointer underline">
+            Login here!
           </Link>
         </div>
       </form>
@@ -118,4 +137,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
