@@ -14,11 +14,10 @@ const createCategoryRequest = async (credentials) => {
   return response;
 };
 
-const updateCategoryRequest = async (categoryId, credentials) => {
-  const response = await axios.post(
-    `sport-categories/update/${categoryId}`,
-    credentials
-  );
+const updateCategoryRequest = async (id, name) => {
+  const response = await axios.post(`sport-categories/update/${id}`, {
+    name: name,
+  });
 
   return response;
 };

@@ -27,7 +27,6 @@ const categorySlice = createSlice({
       })
       .addCase(categoriesThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        console.log(payload);
         state.category = payload.result.data;
         state.currentPage = payload.result.current_page;
         state.totalPages = payload.result.last_page;
@@ -42,7 +41,6 @@ const categorySlice = createSlice({
       })
       .addCase(createCategoryThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        console.log(payload);
       })
       .addCase(createCategoryThunk.rejected, (state, { payload }) => {
         state.loading = false;
@@ -54,7 +52,6 @@ const categorySlice = createSlice({
       })
       .addCase(updateCategoryThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        console.log(payload);
       })
       .addCase(updateCategoryThunk.rejected, (state, { payload }) => {
         state.loading = false;
@@ -66,7 +63,6 @@ const categorySlice = createSlice({
       })
       .addCase(deleteCategoryThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        console.log(payload);
       })
       .addCase(deleteCategoryThunk.rejected, (state, { payload }) => {
         state.loading = false;

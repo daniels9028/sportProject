@@ -32,12 +32,9 @@ export const createCategoryThunk = createAsyncThunk(
 
 export const updateCategoryThunk = createAsyncThunk(
   "category/update",
-  async ({ categoryId, credential }, thunkAPI) => {
+  async ({ id, name }, thunkAPI) => {
     try {
-      const { data } = await categoryServices.updateCategoryRequest(
-        categoryId,
-        credential
-      );
+      const { data } = await categoryServices.updateCategoryRequest(id, name);
 
       return data;
     } catch (error) {

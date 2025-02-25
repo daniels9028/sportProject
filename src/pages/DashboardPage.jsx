@@ -1,118 +1,189 @@
-import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
-import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { Card, CardContent } from "../components/Card";
+import { Menu, X } from "lucide-react";
+import { categoriesThunk } from "../features/category/categoryThunks";
+
+const news = [
+  {
+    title: "Ethiopian runners took the top four spots",
+    date: "Feb 24, 2025",
+    image: "/images/runners.jpg",
+  },
+  {
+    title: "IndyCar Detroit: Dixon qualifies in second practice",
+    date: "Feb 24, 2025",
+    image: "/images/indycar.jpg",
+  },
+];
 
 const DashboardPage = () => {
   const { user } = useSelector((state) => state.profile);
+  const { category } = useSelector((state) => state.category);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   useEffect(() => {
     if (user?.role === "admin") navigate("/admin");
   }, [user, navigate]);
 
+  useEffect(() => {
+    dispatch(categoriesThunk());
+  }, []);
+
+  console.log(category);
+
   return (
-    <div className="min-h-screen bg-black text-white p-10">
-      <header className="flex justify-between items-center border-b-4 border-white pb-5">
-        <h1 className="text-5xl font-extrabold uppercase tracking-widest">
-          SportX
-        </h1>
-        <nav className="space-x-6 text-lg uppercase">
-          <a href="#features" className="hover:underline">
-            Features
-          </a>
-          <a href="#about" className="hover:underline">
-            About
-          </a>
-          <a href="#contact" className="hover:underline">
-            Contact
-          </a>
-        </nav>
+    <div className="bg-white min-h-screen font-mono text-black">
+      {/* Header */}
+      <header className="border-b-4 border-black bg-gray-100 uppercase px-6 py-6 md:px-12">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tighter">
+            Sport News
+          </h1>
+
+          {/* Burger Icon for Mobile */}
+          <button
+            className="lg:hidden border-2 border-black p-2"
+            onClick={toggleMenu}
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          {/* Desktop Menu */}
+          <nav className="hidden lg:flex flex-wrap justify-center gap-8 text-base lg:text-lg">
+            {["Home", "Category", "Explore", "About"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="hover:underline underline-offset-4 decoration-2"
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+
+          <Link
+            to="/login"
+            className="cursor-pointer hidden lg:block border-2 border-black bg-black text-white px-6 py-2 hover:bg-gray-800 transition"
+          >
+            Login
+          </Link>
+        </div>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <nav className="flex flex-col justify-center items-center w-full gap-4 mt-4 lg:hidden">
+            {["Home", "Category", "Explore", "About"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="hover:underline underline-offset-4 decoration-2"
+              >
+                {item}
+              </a>
+            ))}
+            <Link
+              to="/login"
+              className="border-2 w-full border-black bg-black text-white px-6 py-2 hover:bg-gray-800 transition cursor-pointer"
+            >
+              Login
+            </Link>
+          </nav>
+        )}
       </header>
 
-      <main className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-20 items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="space-y-8"
-        >
-          <h2 className="text-6xl font-extrabold uppercase leading-tight">
-            Push Your Limits <br />{" "}
-            <span className="text-red-500">Dominate the Game</span>
-          </h2>
-          <p className="text-xl uppercase tracking-wide">
-            Join the future of sports performance with cutting-edge tools and
-            community support.
-          </p>
-          <Button className="bg-red-500 text-white text-lg px-8 py-4 rounded-none border-4 border-white uppercase hover:bg-white hover:text-black transition">
-            Get Started
-          </Button>
-        </motion.div>
+      {/* Hero Section */}
+      <section className="relative bg-white py-12 px-6 md:py-20 md:px-12 text-left border-y-4 border-black">
+        <h2 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight uppercase max-w-3xl md:max-w-4xl">
+          Top Scorer <span className="text-gray-400">to the Final Match</span>
+        </h2>
+        <p className="text-base leading-relaxed max-w-lg md:max-w-2xl mt-6 md:mt-8">
+          The EuroLeague Finals Top Scorer is the individual award for the
+          player that gained the highest points in the EuroLeague Finals.
+        </p>
+        <Button className="mt-8 md:mt-10 bg-black text-white px-8 py-3 rounded-none border-2 border-black text-base md:text-lg w-full md:w-auto">
+          Continue Reading
+        </Button>
+      </section>
 
-        <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <Card className="bg-red-500 rounded-none border-4 border-white">
-            <CardContent className="p-0">
-              <img
-                src="https://source.unsplash.com/800x600/?sports,fitness"
-                alt="Sports Action"
-                className="w-full h-full object-cover"
-              />
+      {/* Trending Section */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 md:px-12 py-12 md:py-16 border-b-4 border-black bg-gray-50">
+        {news.map((item, index) => (
+          <Card key={index} className="border-2 border-black bg-white">
+            <img
+              src={item.image}
+              alt={item.title}
+              className="w-full h-48 object-cover"
+            />
+            <CardContent className="p-4 md:p-6">
+              <p className="text-sm uppercase text-gray-600">{item.date}</p>
+              <h3 className="text-lg md:text-xl font-semibold mt-2 uppercase leading-snug">
+                {item.title}
+              </h3>
             </CardContent>
           </Card>
-        </motion.div>
-      </main>
+        ))}
+      </section>
 
-      <section id="features" className="mt-32 border-t-4 border-white pt-20">
-        <h3 className="text-4xl font-extrabold uppercase mb-12">Features</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            "Personalized Training Plans",
-            "Real-Time Performance Tracking",
-            "Community Challenges",
-          ].map((feature, index) => (
+      {/* Category Section */}
+      <section className="px-6 md:px-12 py-12 md:py-16 bg-white border-b-4 border-black">
+        <h2 className="text-3xl md:text-4xl font-bold uppercase mb-8 md:mb-12">
+          Category
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-8">
+          {category?.map((item, index) => (
             <Card
               key={index}
-              className="bg-black border-4 border-white rounded-none p-6 hover:bg-red-500 transition"
+              className="border-2 border-black bg-gray-100 hover:bg-black hover:text-white transition-colors duration-300 cursor-pointer"
             >
-              <CardContent className="text-xl font-bold uppercase">
-                {feature}
+              <img
+                src={item?.image}
+                alt={item?.name}
+                className="w-full h-36 md:h-48 object-cover border-b-2 border-black"
+              />
+              <CardContent className="p-3 md:p-6 text-center">
+                <h3 className="font-bold text-base md:text-lg uppercase">
+                  {item?.name}
+                </h3>
               </CardContent>
             </Card>
           ))}
         </div>
       </section>
 
-      <section
-        id="about"
-        className="mt-32 border-t-4 border-white pt-20 text-center"
-      >
-        <h3 className="text-4xl font-extrabold uppercase mb-8">About SportX</h3>
-        <p className="text-lg uppercase tracking-wider max-w-3xl mx-auto">
-          SportX is designed for athletes who push boundaries. Our brutalist
-          design reflects the raw determination and power needed to succeed in
-          sports. Join a community built for winners.
-        </p>
+      {/* Newsletter Section */}
+      <section className="bg-black text-white px-6 md:px-12 py-16 md:py-20 text-center border-t-4 border-white">
+        <h2 className="text-3xl md:text-4xl font-bold uppercase mb-4 md:mb-6">
+          Newsletter Subscription
+        </h2>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          className="px-4 py-2 md:px-6 md:py-3 w-full md:w-72 border-2 border-white bg-transparent mb-6 text-center"
+        />
+        <Button className="bg-white text-black px-6 md:px-8 py-2 md:py-3 rounded-none text-base md:text-lg border-2 border-black uppercase w-full md:w-auto">
+          Subscribe
+        </Button>
       </section>
 
-      <footer
-        id="contact"
-        className="mt-32 border-t-4 border-white pt-10 text-center"
-      >
-        <h4 className="text-3xl font-extrabold uppercase mb-6">Get In Touch</h4>
-        <Button className="bg-white text-black text-lg px-8 py-4 rounded-none border-4 border-black uppercase hover:bg-red-500 hover:text-white transition">
-          Contact Us
-        </Button>
-        <p className="text-sm uppercase mt-6">
-          &copy; 2025 SportX. All Rights Reserved.
-        </p>
+      {/* Footer */}
+      <footer className="flex flex-col sm:flex-row justify-center items-center py-6 bg-gray-100 border-t-4 border-black gap-4 md:gap-6">
+        {["Facebook", "Twitter", "Instagram"].map((item) => (
+          <a
+            key={item}
+            href="#"
+            className="text-black uppercase hover:underline"
+          >
+            {item}
+          </a>
+        ))}
       </footer>
     </div>
   );
