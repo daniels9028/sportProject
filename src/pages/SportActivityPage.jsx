@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
 import { useDispatch, useSelector } from "react-redux";
-import { Plus, Trash2, Edit, ChevronLeft, ChevronRight, X } from "lucide-react";
 import {
+  Plus,
+  Pencil,
+  Trash,
+  ChevronLeft,
+  ChevronRight,
+  X,
+} from "lucide-react";
+import {
+  deleteSportActivityThunk,
   sportActivitiesThunk,
   sportActivityByIdThunk,
 } from "../features/activity/activityThunks";
 import { clearSelectedItem } from "../features/activity/activitySlice";
 import { Button } from "../components/Button";
 import { motion, AnimatePresence } from "framer-motion";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 
 const SportActivityPage = () => {
   const { activity, currentPage, totalPages, selectedItem, selectedLoading } =
@@ -16,43 +25,60 @@ const SportActivityPage = () => {
 
   const dispatch = useDispatch();
 
-  const [newSport, setNewSport] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [editedName, setEditedName] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const handleAddActivity = () => {
+  //   if (newSport.trim()) {
+  //     dispatch(createCategoryThunk({ name: newSport })).then(() => {
+  //       dispatch(categoriesThunk(currentPage));
+  //     });
+  //     setNewSport("");
+  //   }
+  // };
 
-  const handleAddSport = () => {
-    if (newSport.trim()) {
-      dispatch(createCategoryThunk({ name: newSport })).then(() => {
-        dispatch(categoriesThunk(currentPage));
-      });
-      setNewSport("");
-    }
-  };
+  // const handleUpdateActivity = () => {
+  //   if (editedName.trim()) {
+  //     dispatch(updateCategoryThunk({ id: editingId, name: editedName })).then(
+  //       () => {
+  //         dispatch(categoriesThunk(currentPage));
+  //         setIsModalOpen(false);
+  //         setEditingId(null);
+  //         setEditedName("");
+  //       }
+  //     );
+  //   }
+  // };
 
-  const handleEditSport = (id, name) => {
-    setEditingId(id);
-    setEditedName(name);
-    setIsModalOpen(true);
-  };
+  const handleDeleteActivity = (id) => {
+    dispatch(deleteSportActivityThunk(id))
+      .unwrap()
+      .then(() => {
+        toast("Sport Activity Deleted Successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
 
-  const handleUpdateSport = () => {
-    if (editedName.trim()) {
-      dispatch(updateCategoryThunk({ id: editingId, name: editedName })).then(
-        () => {
-          dispatch(categoriesThunk(currentPage));
-          setIsModalOpen(false);
-          setEditingId(null);
-          setEditedName("");
-        }
+        dispatch(sportActivitiesThunk(currentPage));
+        dispatch(clearSelectedItem());
+      })
+      .catch((response) =>
+        toast(response.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        })
       );
-    }
-  };
-
-  const handleDeleteSport = (id) => {
-    dispatch(deleteCategoryThunk(id)).then(() => {
-      dispatch(categoriesThunk(currentPage));
-    });
   };
 
   useEffect(() => {
@@ -76,6 +102,7 @@ const SportActivityPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
+      <ToastContainer />
       <AdminNavbar />
 
       <div className="p-6 bg-white rounded-2xl shadow-md">
@@ -83,10 +110,7 @@ const SportActivityPage = () => {
           Sports Activity Management
         </h2>
         <div className="flex gap-2 mb-4 justify-end">
-          <Button
-            onClick={handleAddSport}
-            className="rounded-2xl flex items-center gap-2"
-          >
+          <Button className="rounded-2xl flex items-center gap-2">
             <Plus className="w-4 h-4" /> Add Sport Activity
           </Button>
         </div>
@@ -144,36 +168,6 @@ const SportActivityPage = () => {
           </Button>
         </div>
 
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
-              <h3 className="text-xl font-semibold mb-4">
-                Edit Sport Category
-              </h3>
-              <input
-                type="text"
-                value={editedName}
-                onChange={(e) => setEditedName(e.target.value)}
-                className="border rounded-2xl p-2 w-full mb-4"
-              />
-              <div className="flex justify-end gap-2">
-                <Button
-                  onClick={() => setIsModalOpen(false)}
-                  className="rounded-2xl bg-gray-300 text-black"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleUpdateSport}
-                  className="rounded-2xl bg-gray-300 text-black"
-                >
-                  Save
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Modal */}
         <AnimatePresence>
           {(selectedItem || selectedLoading) && (
@@ -181,7 +175,7 @@ const SportActivityPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50"
+              className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex justify-center items-center z-50"
               onClick={handleCloseModal}
             >
               <motion.div
@@ -190,7 +184,7 @@ const SportActivityPage = () => {
                 exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white border-[5px] border-black shadow-[10px_10px_0px_rgba(0,0,0,1)] rounded-sm w-full max-w-2xl p-8 relative"
+                className="bg-white border-[6px] border-black shadow-[15px_15px_0px_rgba(0,0,0,1)] rounded-none w-full max-w-3xl p-10 relative"
               >
                 <button
                   onClick={handleCloseModal}
@@ -198,8 +192,9 @@ const SportActivityPage = () => {
                 >
                   <X size={24} />
                 </button>
+
                 {selectedLoading ? (
-                  <div className="flex justify-center items-center h-60">
+                  <div className="flex justify-center items-center h-64">
                     <motion.div
                       className="w-16 h-16 border-4 border-black border-t-transparent rounded-full animate-spin"
                       animate={{ rotate: 360 }}
@@ -212,10 +207,10 @@ const SportActivityPage = () => {
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-3xl font-extrabold uppercase mb-6 tracking-wide border-b-[3px] border-black pb-2">
+                    <h2 className="text-4xl font-extrabold uppercase mb-8 tracking-wide border-b-[5px] border-black pb-3">
                       {selectedItem.title}
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <Detail
                         label="Kategori"
                         value={selectedItem?.sport_category?.name || "N/A"}
@@ -227,6 +222,28 @@ const SportActivityPage = () => {
                         label="Tanggal"
                         value={`${selectedItem?.activity_date} | ${selectedItem?.start_time} - ${selectedItem?.end_time}`}
                       />
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex justify-end gap-4 mt-10">
+                      <motion.button
+                        whileHover={{ scale: 1.1, rotate: "-2deg" }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 bg-black text-white border-[3px] border-black px-6 py-3 text-lg font-bold uppercase shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:bg-yellow-400 hover:text-black transition-all duration-300"
+                        onClick={() => console.log("Edit clicked")}
+                      >
+                        <Pencil size={20} />
+                        Edit
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1, rotate: "2deg" }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 bg-red-600 text-white border-[3px] border-black px-6 py-3 text-lg font-bold uppercase shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:bg-white hover:text-red-600 transition-all duration-300"
+                        onClick={() => handleDeleteActivity(selectedItem.id)}
+                      >
+                        <Trash size={20} />
+                        Delete
+                      </motion.button>
                     </div>
                   </>
                 )}

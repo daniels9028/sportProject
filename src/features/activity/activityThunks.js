@@ -36,7 +36,9 @@ export const createSportActivityThunk = createAsyncThunk(
   "activity/create-sport-activity",
   async (credentials, thunkAPI) => {
     try {
-      const { data } = activityServices.createSportActivityRequest(credentials);
+      const { data } = await activityServices.createSportActivityRequest(
+        credentials
+      );
 
       return data;
     } catch (error) {
@@ -49,7 +51,9 @@ export const updateSportActivityThunk = createAsyncThunk(
   "activity/update-sport-activity",
   async (credentials, thunkAPI) => {
     try {
-      const { data } = activityServices.updateSportActivityRequest(credentials);
+      const { data } = await activityServices.updateSportActivityRequest(
+        credentials
+      );
 
       return data;
     } catch (error) {
@@ -62,7 +66,9 @@ export const deleteSportActivityThunk = createAsyncThunk(
   "activity/delete-sport-activity",
   async (credentials, thunkAPI) => {
     try {
-      const { data } = activityServices.deleteSportActivityRequest(credentials);
+      const { data } = await activityServices.deleteSportActivityRequest(
+        credentials
+      );
 
       return data;
     } catch (error) {
