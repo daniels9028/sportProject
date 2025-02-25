@@ -14,12 +14,19 @@ const initialState = {
   totalPages: 1,
   error: null,
   loading: false,
+  selectedItem: null,
+  selectedLoading: false,
 };
 
 const activitySlice = createSlice({
   name: "activity",
   initialState,
-  reducers: {},
+  reducers: {
+    clearSelectedItem: (state) => {
+      state.selectedItem = null;
+      state.selectedLoading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(sportActivitiesThunk.pending, (state) => {
@@ -34,8 +41,20 @@ const activitySlice = createSlice({
       .addCase(sportActivitiesThunk.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
+      })
+      .addCase(sportActivityByIdThunk.pending, (state) => {
+        state.selectedLoading = true;
+      })
+      .addCase(sportActivityByIdThunk.fulfilled, (state, { payload }) => {
+        state.selectedLoading = false;
+        state.selectedItem = payload.result;
+      })
+      .addCase(sportActivityByIdThunk.rejected, (state, { payload }) => {
+        state.selectedLoading = false;
+        state.error = payload;
       });
   },
 });
 
+export const { clearSelectedItem } = activitySlice.actions;
 export default activitySlice.reducer;
