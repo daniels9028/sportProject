@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "../components/Button";
-import { Card, CardContent } from "../components/Card";
-import { Plus, Trash2, Edit, ChevronLeft, ChevronRight } from "lucide-react";
+import AdminNavbar from "./AdminNavbar";
 import { useDispatch, useSelector } from "react-redux";
+import { Plus, Trash2, Edit, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   categoriesThunk,
   createCategoryThunk,
   updateCategoryThunk,
   deleteCategoryThunk,
 } from "../features/category/categoryThunks";
-import AdminNavbar from "./AdminNavbar";
+import { Button } from "../components/Button";
+import { Card } from "../components/Card";
 
-const SportCategoryPage = () => {
+const SportActivityPage = () => {
   const {
     category: sports,
     currentPage,
@@ -81,7 +81,7 @@ const SportCategoryPage = () => {
 
       <div className="p-6 bg-white rounded-2xl shadow-md">
         <h2 className="text-2xl font-semibold mb-4">
-          Sports Category Management
+          Sports Activity Management
         </h2>
         <div className="flex gap-2 mb-4">
           <input
@@ -179,4 +179,4 @@ const SportCategoryPage = () => {
   );
 };
 
-export default SportCategoryPage;
+export default SportActivityPage;
