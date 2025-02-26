@@ -3,7 +3,12 @@ import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoriesThunk } from "../../features/category/categoryThunks";
+import {
+  provincesThunk,
+  citiesByProvinceIdThunk,
+} from "../../features/location/locationThunks";
 import { setPaginate } from "../../features/category/categorySlice";
+import { setSelectedProvince } from "../../features/location/locationSlice";
 
 const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -19,12 +24,21 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
     limit,
   } = useSelector((state) => state.category);
 
+  const { provinces, selectedProvince, cities } = useSelector(
+    (state) => state.location
+  );
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSelectChange = (e) => {
+    dispatch(setSelectedProvince(e.target.value));
+  };
+
   useEffect(() => {
     dispatch(setPaginate({ paginate: false, limit: 100 }));
+    dispatch(provincesThunk());
   }, []);
 
   useEffect(() => {
@@ -32,6 +46,12 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
       dispatch(categoriesThunk({ paginate: paginate, limit: limit, page: 1 }));
     }
   }, [paginate, limit]);
+
+  useEffect(() => {
+    if (selectedProvince) {
+      dispatch(citiesByProvinceIdThunk(selectedProvince));
+    }
+  }, [selectedProvince]);
 
   return (
     <AnimatePresence>
@@ -183,9 +203,32 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
                   <option value="" disabled selected>
                     Choose...
                   </option>
-                  {categories.map((category) => (
+                  {categories?.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-lg font-bold">Province</label>
+                <select
+                  type="text"
+                  name="province"
+                  value={formData.province}
+                  onChange={handleSelectChange}
+                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Choose...
+                  </option>
+                  {provinces?.map((province) => (
+                    <option
+                      key={province.province_id}
+                      value={province.province_id}
+                    >
+                      {province.province_name_id}
                     </option>
                   ))}
                 </select>
@@ -196,13 +239,17 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
                   type="text"
                   name="city"
                   value={formData.city}
-                  onChange={handleChange}
                   className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
                   required
                 >
                   <option value="" disabled selected>
                     Choose...
                   </option>
+                  {cities?.map((city) => (
+                    <option key={city.city_id} value={city.city_id}>
+                      {city.city_name_full}
+                    </option>
+                  ))}
                 </select>
               </div>
               <button

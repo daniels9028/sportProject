@@ -37,8 +37,6 @@ const DashboardPage = () => {
     dispatch(categoriesThunk());
   }, []);
 
-  console.log(category);
-
   return (
     <div className="bg-white min-h-screen font-mono text-black">
       {/* Header */}

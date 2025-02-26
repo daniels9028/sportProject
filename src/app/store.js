@@ -3,6 +3,7 @@ import authReducer from "../features/auth/authSlice";
 import profileReducer from "../features/profile/profileSlice";
 import categoryReducer from "../features/category/categorySlice";
 import activityReducer from "../features/activity/activitySlice";
+import locationReducer from "../features/location/locationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     profile: profileReducer,
     category: categoryReducer,
     activity: activityReducer,
+    location: locationReducer,
   },
 });
