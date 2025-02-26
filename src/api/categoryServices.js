@@ -1,8 +1,8 @@
 import axios from "../axios/axios";
 
-const categoriesRequest = async (page) => {
+const categoriesRequest = async (credentials) => {
   const response = await axios.get(
-    `sport-categories?is_paginate=true&per_page=5&page=${page}`
+    `sport-categories?is_paginate=${credentials.paginate}&per_page=${credentials.limit}&page=${credentials.page}`
   );
 
   return response;

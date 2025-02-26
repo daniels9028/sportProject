@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { loginThunk, registerThunk, logoutThunk } from "./authThunks";
 
 const initialState = {
-  token: sessionStorage.getItem("token") || null,
+  token: localStorage.getItem("token") || null,
   loading: false,
 };
 
@@ -20,7 +20,7 @@ const authSlice = createSlice({
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.token = payload.data.token;
-        sessionStorage.setItem("token", payload.data.token);
+        localStorage.setItem("token", payload.data.token);
       })
       .addCase(loginThunk.rejected, (state) => {
         state.loading = false;
@@ -39,7 +39,7 @@ const authSlice = createSlice({
       })
       .addCase(logoutThunk.fulfilled, (state) => {
         state.loading = false;
-        sessionStorage.removeItem("token");
+        localStorage.removeItem("token");
       })
       .addCase(logoutThunk.rejected, (state) => {
         state.loading = false;

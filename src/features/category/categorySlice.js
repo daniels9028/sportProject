@@ -13,12 +13,19 @@ const initialState = {
   error: null,
   currentPage: 1,
   totalPages: 1,
+  paginate: true,
+  limit: 5,
 };
 
 const categorySlice = createSlice({
   name: "category",
   initialState,
-  reducers: {},
+  reducers: {
+    setPaginate: (state, action) => {
+      state.paginate = action.payload.paginate;
+      state.limit = action.payload.limit;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(categoriesThunk.pending, (state) => {
@@ -27,7 +34,7 @@ const categorySlice = createSlice({
       })
       .addCase(categoriesThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.category = payload.result.data;
+        state.category = state.paginate ? payload.result.data : payload.result;
         state.currentPage = payload.result.current_page;
         state.totalPages = payload.result.last_page;
       })
@@ -71,4 +78,5 @@ const categorySlice = createSlice({
   },
 });
 
+export const { setPaginate } = categorySlice.actions;
 export default categorySlice.reducer;

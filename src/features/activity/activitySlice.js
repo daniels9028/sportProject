@@ -52,6 +52,15 @@ const activitySlice = createSlice({
       .addCase(sportActivityByIdThunk.rejected, (state, { payload }) => {
         state.selectedLoading = false;
         state.error = payload;
+      })
+      .addCase(deleteSportActivityThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteSportActivityThunk.fulfilled, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(deleteSportActivityThunk.rejected, (state, { payload }) => {
+        state.loading = false;
       });
   },
 });

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { updateUserThunk, myProfileThunk } from "./profileThunks";
 
 const initialState = {
-  user: JSON.parse(sessionStorage.getItem("user")) || null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
   error: null,
 };
@@ -32,7 +32,7 @@ const profileSlice = createSlice({
       .addCase(myProfileThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.user = payload.data;
-        sessionStorage.setItem("user", JSON.stringify(payload.data));
+        localStorage.setItem("user", JSON.stringify(payload.data));
       })
       .addCase(myProfileThunk.rejected, (state, { payload }) => {
         state.loading = false;

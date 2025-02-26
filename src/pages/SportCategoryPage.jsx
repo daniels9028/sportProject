@@ -16,6 +16,8 @@ const SportCategoryPage = () => {
     category: sports,
     currentPage,
     totalPages,
+    paginate,
+    limit,
   } = useSelector((state) => state.category);
 
   const dispatch = useDispatch();
@@ -28,7 +30,13 @@ const SportCategoryPage = () => {
   const handleAddSport = () => {
     if (newSport.trim()) {
       dispatch(createCategoryThunk({ name: newSport })).then(() => {
-        dispatch(categoriesThunk(currentPage));
+        dispatch(
+          categoriesThunk({
+            paginate: paginate,
+            limit: limit,
+            page: currentPage,
+          })
+        );
       });
       setNewSport("");
     }
@@ -44,7 +52,13 @@ const SportCategoryPage = () => {
     if (editedName.trim()) {
       dispatch(updateCategoryThunk({ id: editingId, name: editedName })).then(
         () => {
-          dispatch(categoriesThunk(currentPage));
+          dispatch(
+            categoriesThunk({
+              paginate: paginate,
+              limit: limit,
+              page: currentPage,
+            })
+          );
           setIsModalOpen(false);
           setEditingId(null);
           setEditedName("");
@@ -55,23 +69,39 @@ const SportCategoryPage = () => {
 
   const handleDeleteSport = (id) => {
     dispatch(deleteCategoryThunk(id)).then(() => {
-      dispatch(categoriesThunk(currentPage));
+      dispatch(
+        categoriesThunk({ paginate: paginate, limit: limit, page: currentPage })
+      );
     });
   };
 
   useEffect(() => {
-    dispatch(categoriesThunk(currentPage));
+    dispatch(
+      categoriesThunk({ paginate: paginate, limit: limit, page: currentPage })
+    );
   }, [dispatch, currentPage]);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      dispatch(categoriesThunk(currentPage - 1));
+      dispatch(
+        categoriesThunk({
+          paginate: paginate,
+          limit: limit,
+          page: currentPage - 1,
+        })
+      );
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      dispatch(categoriesThunk(currentPage + 1));
+      dispatch(
+        categoriesThunk({
+          paginate: paginate,
+          limit: limit,
+          page: currentPage + 1,
+        })
+      );
     }
   };
 
