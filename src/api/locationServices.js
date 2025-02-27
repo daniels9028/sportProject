@@ -8,9 +8,9 @@ const provinciesRequest = async () => {
   return response;
 };
 
-const citiesByProvinceIdRequest = async (provinceId) => {
+const citiesByProvinceIdRequest = async (credentials) => {
   const response = await axios.get(
-    `location/cities/${provinceId}?is_paginate=false&per_page=100&page=1`
+    `location/cities/${credentials.value}?is_paginate=false&per_page=100&page=1`
   );
 
   return response;

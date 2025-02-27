@@ -8,32 +8,107 @@ import {
   citiesByProvinceIdThunk,
 } from "../../features/location/locationThunks";
 import { setPaginate } from "../../features/category/categorySlice";
-import { setSelectedProvince } from "../../features/location/locationSlice";
+import {
+  setSelectedProvince,
+  setSelectedCategory,
+  setSelectedCity,
+} from "../../features/location/locationSlice";
+import InputSportActivity from "./InputSportActivity";
+import TextAreaSportActivity from "./TextAreaSportActivity";
+import Select from "react-select";
+import * as z from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  title: z
+    .string()
+    .min(3, "Title must be at least 3 characters")
+    .nonempty("Title is required"),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters")
+    .nonempty("Description is required"),
+  slot: z.coerce.number().min(1, "Slot must be at least 1"),
+  price: z.coerce.number().min(0, "Price must be at least 0"),
+  activity_date: z.string().nonempty("Activity date is required"),
+  start_time: z.string().nonempty("Start time is required"),
+  end_time: z.string().nonempty("End time is required"),
+  map_url: z.string().url("Invalid URL").optional().or(z.literal("")),
+  sport_category_id: z.number(),
+  city_id: z.number(),
+});
 
 const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+  // const [formData, setFormData] = useState({
+  //   title: "",
+  //   description: "",
+  //   slot: 0,
+  //   price: 0,
+  //   address: "",
+  //   activity_date: "",
+  //   start_time: "",
+  //   end_time: "",
+  //   map_url: "",
+  //   sport_category_id: "",
+  //   city_id: "",
+  // });
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      slot: 0,
+      price: 0,
+      address: "",
+      activity_date: "",
+      start_time: "",
+      end_time: "",
+      map_url: "",
+      sport_category_id: "",
+      city_id: "",
+    },
   });
 
   const dispatch = useDispatch();
 
+  const { category, paginate, limit } = useSelector((state) => state.category);
+
+  const categories = category.slice().map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+
   const {
-    category: categories,
-    paginate,
-    limit,
-  } = useSelector((state) => state.category);
+    provinces,
+    selectedProvince,
+    cities,
+    selectedCategory,
+    selectedCity,
+  } = useSelector((state) => state.location);
 
-  const { provinces, selectedProvince, cities } = useSelector(
-    (state) => state.location
-  );
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleSelectChange = (selected) => {
+    dispatch(setSelectedProvince(selected));
   };
+  const onSubmit = (data) => {
+    const result = formSchema.safeParse(data);
+    if (!result.success) {
+      // If validation fails, log or handle the errors as needed
+      console.error("Validation errors:", result.error.issues);
+      // Optionally, display errors to the user or set form errors manually
+      return;
+    }
 
-  const handleSelectChange = (e) => {
-    dispatch(setSelectedProvince(e.target.value));
+    // If validation succeeds, result.data contains the valid data
+    console.log("Validated Data:", result.data);
+
+    // Proceed with further processing, e.g., dispatching an action or sending an API request
   };
 
   useEffect(() => {
@@ -81,177 +156,126 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
                 <X size={24} />
               </button>
             </div>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-lg font-bold">Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-lg font-bold">Description</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows="4"
-                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  required
-                />
-              </div>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+              <InputSportActivity
+                type="text"
+                label="Title"
+                name="title"
+                register={register}
+                errors={errors.title}
+              />
+              <TextAreaSportActivity
+                label="Description"
+                name="description"
+                register={register}
+                errors={errors.description}
+              />
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="w-full">
-                  <label className="block text-lg font-bold">Slot</label>
-                  <input
-                    type="number"
-                    name="slot"
-                    min={0}
-                    value={formData.slot}
-                    onChange={handleChange}
-                    className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
-                <div className="w-full">
-                  <label className="block text-lg font-bold">Price</label>
-                  <input
-                    type="number"
-                    name="price"
-                    min={0}
-                    value={formData.price}
-                    onChange={handleChange}
-                    className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-lg font-bold">Address</label>
-                <textarea
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  rows="3"
-                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  required
+                <InputSportActivity
+                  type="number"
+                  label="Slot"
+                  name="slot"
+                  register={register}
+                  errors={errors.slot}
+                  classnameHeader="w-full"
+                />
+                <InputSportActivity
+                  type="number"
+                  label="Price"
+                  name="price"
+                  register={register}
+                  errors={errors.price}
+                  classnameHeader="w-full"
                 />
               </div>
-              <div>
-                <label className="block text-lg font-bold">Activity Date</label>
-                <input
-                  type="date"
-                  name="activity_date"
-                  min={0}
-                  value={formData.activity_date}
-                  onChange={handleChange}
-                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  required
-                />
-              </div>
+              <TextAreaSportActivity
+                label="Address"
+                name="address"
+                register={register}
+                errors={errors.address}
+              />
+              <InputSportActivity
+                type="date"
+                label="Activity Date"
+                name="activity_date"
+                register={register}
+                errors={errors.activity_date}
+              />
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="w-full">
-                  <label className="block text-lg font-bold">Start Time</label>
-                  <input
-                    type="time"
-                    name="start_time"
-                    value={formData.start_time}
-                    onChange={handleChange}
-                    className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
-                <div className="w-full">
-                  <label className="block text-lg font-bold">End Time</label>
-                  <input
-                    type="time"
-                    name="end_time"
-                    value={formData.end_time}
-                    onChange={handleChange}
-                    className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-lg font-bold">Map Url</label>
-                <input
-                  type="text"
-                  name="map_url"
-                  value={formData.map_url}
-                  onChange={handleChange}
-                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  required
+                <InputSportActivity
+                  type="time"
+                  label="Start Time"
+                  name="start_time"
+                  register={register}
+                  errors={errors.start_time}
+                  classnameHeader="w-full"
+                />
+                <InputSportActivity
+                  type="time"
+                  label="End Time"
+                  name="end_time"
+                  register={register}
+                  errors={errors.end_time}
+                  classnameHeader="w-full"
                 />
               </div>
-              <div>
-                <label className="block text-lg font-bold">
-                  Sport Category
-                </label>
-                <select
-                  type="text"
-                  name="sport_category"
-                  value={formData.sport_category}
-                  onChange={handleChange}
-                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Choose...
-                  </option>
-                  {categories?.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-lg font-bold">Province</label>
-                <select
-                  type="text"
-                  name="province"
-                  value={formData.province}
-                  onChange={handleSelectChange}
-                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Choose...
-                  </option>
-                  {provinces?.map((province) => (
-                    <option
-                      key={province.province_id}
-                      value={province.province_id}
-                    >
-                      {province.province_name_id}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-lg font-bold">City</label>
-                <select
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  className="w-full p-3 border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Choose...
-                  </option>
-                  {cities?.map((city) => (
-                    <option key={city.city_id} value={city.city_id}>
-                      {city.city_name_full}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <InputSportActivity
+                type="text"
+                label="Map Url"
+                name="map_url"
+                register={register}
+                errors={errors.map_url}
+              />
+              <Controller
+                name="sport_category_id"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={categories}
+                    value={selectedCategory}
+                    onChange={(selected) => {
+                      field.onChange(selected.value);
+                      dispatch(setSelectedCategory(selected));
+                    }}
+                    className="w-full border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
+                    placeholder="Choose sport category"
+                  />
+                )}
+              />
+              {errors.sport_category_id && (
+                <p className="text-red-600">
+                  {errors.sport_category_id.message}
+                </p>
+              )}
+              <Select
+                options={provinces}
+                value={selectedProvince}
+                onChange={handleSelectChange}
+                className="w-full border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
+                placeholder="Choose province"
+              />
+              <Controller
+                name="city_id"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={cities}
+                    value={selectedCity}
+                    onChange={(selected) => {
+                      field.onChange(selected.value);
+                      dispatch(setSelectedCity(selected));
+                    }}
+                    className="w-full border-2 border-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
+                    placeholder="Choose sport category"
+                  />
+                )}
+              />
+              {errors.city_id && (
+                <p className="text-red-600">{errors.city_id?.message}</p>
+              )}
+
               <button
                 type="submit"
                 className="w-full py-3 bg-black text-white text-lg font-extrabold uppercase hover:bg-gray-800"
