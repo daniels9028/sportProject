@@ -1,4 +1,5 @@
 import { Controller } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import Select from "react-select";
 
 const SelectField = ({
@@ -10,6 +11,7 @@ const SelectField = ({
   placeholder,
   errors,
 }) => {
+  const dispatch = useDispatch();
   return (
     <>
       <Controller

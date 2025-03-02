@@ -6,9 +6,12 @@ import {
   citiesByProvinceIdThunk,
   provincesThunk,
 } from "../features/location/locationThunks";
-import { setSelectedProvince } from "../features/location/locationSlice";
+import {
+  setSelectedCity,
+  setSelectedProvince,
+} from "../features/location/locationSlice";
 
-export const useSportActivityForm = () => {
+export const useSportActivityForm = (selectedItem) => {
   const dispatch = useDispatch();
 
   const { currentPage, loading } = useSelector((state) => state.activity);
@@ -40,7 +43,24 @@ export const useSportActivityForm = () => {
 
   useEffect(() => {
     if (selectedProvince) {
-      dispatch(citiesByProvinceIdThunk(selectedProvince));
+      dispatch(citiesByProvinceIdThunk(selectedProvince))
+        .unwrap()
+        .then(({ result }) => {
+          if (selectedItem) {
+            const matchedCity = result.find(
+              (city) => city.city_id === selectedItem.city_id
+            );
+
+            if (matchedCity) {
+              dispatch(
+                setSelectedCity({
+                  value: matchedCity.city_id,
+                  label: matchedCity.city_name_full,
+                })
+              );
+            }
+          }
+        });
     }
   }, [selectedProvince]);
 

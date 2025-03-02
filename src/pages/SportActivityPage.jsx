@@ -20,15 +20,6 @@ const SportActivityPage = () => {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // const handleAddActivity = () => {
-  //   if (newSport.trim()) {
-  //     dispatch(createCategoryThunk({ name: newSport })).then(() => {
-  //       dispatch(categoriesThunk(currentPage));
-  //     });
-  //     setNewSport("");
-  //   }
-  // };
-
   // const handleUpdateActivity = () => {
   //   if (editedName.trim()) {
   //     dispatch(updateCategoryThunk({ id: editingId, name: editedName })).then(

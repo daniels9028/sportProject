@@ -20,8 +20,9 @@ import {
 } from "../../features/activity/activityThunks";
 import { useSportActivityForm } from "../../hooks/useSportActivityForm";
 import Modal from "../Modal";
+import { useEffect } from "react";
 
-const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
+const ModalCreateSportActivity = ({ isModalOpen, onClose, selectedItem }) => {
   const {
     dispatch,
     loading,
@@ -33,7 +34,7 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
     selectedCategory,
     selectedCity,
     handleSelectChange,
-  } = useSportActivityForm();
+  } = useSportActivityForm(selectedItem);
 
   const {
     register,
@@ -89,6 +90,56 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
         });
       });
   };
+
+  useEffect(() => {
+    if (selectedItem) {
+      reset({
+        title: selectedItem?.title || "",
+        description: selectedItem?.description || "",
+        slot: selectedItem?.slot || 0,
+        price: selectedItem?.price || 0,
+        address: selectedItem?.address || "",
+        activity_date: selectedItem?.activity_date || "",
+        start_time: selectedItem?.start_time || "",
+        end_time: selectedItem?.end_time || "",
+        map_url: selectedItem?.map_url || "",
+        sport_category_id: selectedItem?.sport_category_id || "",
+        city_id: selectedItem?.city_id || "",
+      });
+
+      if (selectedItem?.sport_category) {
+        dispatch(
+          setSelectedCategory({
+            value: selectedItem?.sport_category.id,
+            label: selectedItem?.sport_category.name,
+          })
+        );
+      }
+
+      if (selectedItem?.city?.province) {
+        dispatch(
+          setSelectedProvince({
+            value: selectedItem?.city?.province?.province_id,
+            label: selectedItem?.city?.province?.province_name_id,
+          })
+        );
+      }
+
+      if (selectedItem?.city) {
+        dispatch(
+          setSelectedCity({
+            value: selectedItem?.city?.city_id,
+            label: selectedItem?.city?.city_name_full,
+          })
+        );
+      }
+    } else {
+      reset(defaultValues);
+      dispatch(setSelectedCategory(null));
+      dispatch(setSelectedProvince(null));
+      dispatch(setSelectedCity(null));
+    }
+  }, [selectedItem, reset, dispatch]);
 
   return (
     <>
@@ -186,7 +237,7 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose }) => {
           <SelectField
             name="city_id"
             control={control}
-            options={categories}
+            options={cities}
             value={selectedCity}
             setSelected={setSelectedCity}
             placeholder="Choose city"

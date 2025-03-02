@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSelectedItem } from "../../features/activity/activitySlice";
 import { Pencil, Trash, X } from "lucide-react";
@@ -10,6 +10,7 @@ import {
 } from "../../features/activity/activityThunks";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import { formatCurreny } from "../../utils/formatCurreny";
+import ModalCreateSportActivity from "./ModalCreateSportActivity";
 
 const ModalDetailSportActivity = () => {
   const { selectedItem, selectedLoading, loading, currentPage } = useSelector(
@@ -17,6 +18,11 @@ const ModalDetailSportActivity = () => {
   );
 
   const dispatch = useDispatch();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModalCrud = () => setIsModalOpen(true);
+  const handleCloseModalCrud = () => setIsModalOpen(false);
 
   const handleCloseModal = () => dispatch(clearSelectedItem());
 
@@ -127,7 +133,7 @@ const ModalDetailSportActivity = () => {
                       whileHover={{ scale: 1.1, rotate: "-2deg" }}
                       whileTap={{ scale: 0.95 }}
                       className="flex items-center gap-2 bg-black text-white border-[3px] border-black px-6 py-3 text-lg font-bold uppercase shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:bg-yellow-400 hover:text-black transition-all duration-300"
-                      onClick={() => console.log("Edit clicked")}
+                      onClick={handleOpenModalCrud}
                     >
                       <Pencil size={20} />
                       Edit
@@ -149,6 +155,12 @@ const ModalDetailSportActivity = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ModalCreateSportActivity
+        isModalOpen={isModalOpen}
+        onClose={handleCloseModalCrud}
+        selectedItem={selectedItem}
+      />
     </>
   );
 };
