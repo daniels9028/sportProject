@@ -4,6 +4,7 @@ import profileReducer from "../features/profile/profileSlice";
 import categoryReducer from "../features/category/categorySlice";
 import activityReducer from "../features/activity/activitySlice";
 import locationReducer from "../features/location/locationSlice";
+import paymentReducer from "../features/payment/paymentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     category: categoryReducer,
     activity: activityReducer,
     location: locationReducer,
+    payment: paymentReducer,
   },
 });
