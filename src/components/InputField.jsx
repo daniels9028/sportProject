@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputSportActivity = ({
+const InputField = ({
   label,
   name,
   type,
@@ -22,4 +22,4 @@ const InputSportActivity = ({
   );
 };
 
-export default InputSportActivity;
+export default InputField;

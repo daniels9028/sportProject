@@ -1,6 +1,6 @@
 import React from "react";
 
-const TextAreaSportActivity = ({ label, name, register, errors }) => {
+const TextAreaField = ({ label, name, register, errors }) => {
   return (
     <div>
       <label className="block text-lg font-bold">{label}</label>
@@ -16,4 +16,4 @@ const TextAreaSportActivity = ({ label, name, register, errors }) => {
   );
 };
 
-export default TextAreaSportActivity;
+export default TextAreaField;
