@@ -17,12 +17,19 @@ import {
 import {
   createSportActivityThunk,
   sportActivitiesThunk,
+  updateSportActivityThunk,
 } from "../../features/activity/activityThunks";
 import { useSportActivityForm } from "../../hooks/useSportActivityForm";
 import Modal from "../Modal";
 import { useEffect } from "react";
+import { clearSelectedItem } from "../../features/activity/activitySlice";
 
-const ModalCreateSportActivity = ({ isModalOpen, onClose, selectedItem }) => {
+const ModalCreateSportActivity = ({
+  isModalOpen,
+  onClose,
+  selectedItem,
+  title,
+}) => {
   const {
     dispatch,
     loading,
@@ -35,6 +42,8 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose, selectedItem }) => {
     selectedCity,
     handleSelectChange,
   } = useSportActivityForm(selectedItem);
+
+  const handleCloseModal = () => dispatch(clearSelectedItem());
 
   const {
     register,
@@ -54,20 +63,30 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose, selectedItem }) => {
       return;
     }
 
-    dispatch(createSportActivityThunk(result.data))
+    console.log(selectedItem);
+    const action = selectedItem
+      ? updateSportActivityThunk
+      : createSportActivityThunk;
+
+    dispatch(action({ id: selectedItem?.id, ...result.data }))
       .unwrap()
       .then(() => {
-        toast("Sport activity was created successfully", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        });
+        toast(
+          `Sport activity was ${
+            selectedItem ? "updated" : "created"
+          } successfully`,
+          {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+          }
+        );
 
         dispatch(sportActivitiesThunk(currentPage));
         dispatch(setSelectedCategory(null));
@@ -75,6 +94,7 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose, selectedItem }) => {
         dispatch(setSelectedCity(null));
         reset();
         onClose();
+        selectedItem && handleCloseModal();
       })
       .catch((response) => {
         toast(response.message, {
@@ -100,8 +120,8 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose, selectedItem }) => {
         price: selectedItem?.price || 0,
         address: selectedItem?.address || "",
         activity_date: selectedItem?.activity_date || "",
-        start_time: selectedItem?.start_time || "",
-        end_time: selectedItem?.end_time || "",
+        start_time: selectedItem?.start_time.slice(0, 5) || "",
+        end_time: selectedItem?.end_time.slice(0, 5) || "",
         map_url: selectedItem?.map_url || "",
         sport_category_id: selectedItem?.sport_category_id || "",
         city_id: selectedItem?.city_id || "",
@@ -143,11 +163,7 @@ const ModalCreateSportActivity = ({ isModalOpen, onClose, selectedItem }) => {
 
   return (
     <>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={onClose}
-        title="Input Sport Activity"
-      >
+      <Modal isOpen={isModalOpen} onClose={onClose} title={title}>
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <InputField
             type="text"

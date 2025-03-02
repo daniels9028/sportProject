@@ -20,9 +20,9 @@ const createSportActivityRequest = async (credentials) => {
   return response;
 };
 
-const updateSportActivityRequest = async (sportId, credentials) => {
+const updateSportActivityRequest = async (credentials) => {
   const response = await axios.post(
-    `sport-activities/update/${sportId}`,
+    `sport-activities/update/${credentials.id}`,
     credentials
   );
 

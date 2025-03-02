@@ -160,6 +160,7 @@ const ModalDetailSportActivity = () => {
         isModalOpen={isModalOpen}
         onClose={handleCloseModalCrud}
         selectedItem={selectedItem}
+        title="Edit Sport Activity"
       />
     </>
   );

@@ -20,19 +20,6 @@ const SportActivityPage = () => {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // const handleUpdateActivity = () => {
-  //   if (editedName.trim()) {
-  //     dispatch(updateCategoryThunk({ id: editingId, name: editedName })).then(
-  //       () => {
-  //         dispatch(categoriesThunk(currentPage));
-  //         setIsModalOpen(false);
-  //         setEditingId(null);
-  //         setEditedName("");
-  //       }
-  //     );
-  //   }
-  // };
-
   useEffect(() => {
     dispatch(sportActivitiesThunk(currentPage));
   }, [dispatch, currentPage]);
@@ -68,6 +55,7 @@ const SportActivityPage = () => {
         <ModalCreateSportActivity
           isModalOpen={isModalOpen}
           onClose={handleCloseModal}
+          title="Input Sport Activity"
         />
       </div>
     </div>
