@@ -12,7 +12,7 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import { formatCurreny } from "../../utils/formatCurreny";
 
 const ModalDetailSportActivity = () => {
-  const { selectedItem, selectedLoading, loading } = useSelector(
+  const { selectedItem, selectedLoading, loading, currentPage } = useSelector(
     (state) => state.activity
   );
 

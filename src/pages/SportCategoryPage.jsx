@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../components/Button";
-import { Card, CardContent } from "../components/Card";
+import { Card } from "../components/Card";
 import { Plus, Trash2, Edit, ChevronLeft, ChevronRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,7 +9,9 @@ import {
   updateCategoryThunk,
   deleteCategoryThunk,
 } from "../features/category/categoryThunks";
+import { setPaginate } from "../features/category/categorySlice";
 import AdminNavbar from "./AdminNavbar";
+import { current } from "@reduxjs/toolkit";
 
 const SportCategoryPage = () => {
   const {
@@ -76,10 +78,16 @@ const SportCategoryPage = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      categoriesThunk({ paginate: paginate, limit: limit, page: currentPage })
-    );
-  }, [dispatch, currentPage]);
+    dispatch(setPaginate({ paginate: true, limit: 5 }));
+  }, []);
+
+  useEffect(() => {
+    if (paginate === true && limit === 5) {
+      dispatch(
+        categoriesThunk({ paginate: paginate, limit: limit, page: currentPage })
+      );
+    }
+  }, [paginate, limit, currentPage]);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {

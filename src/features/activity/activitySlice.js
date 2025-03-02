@@ -53,6 +53,15 @@ const activitySlice = createSlice({
         state.selectedLoading = false;
         state.error = payload;
       })
+      .addCase(createSportActivityThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createSportActivityThunk.fulfilled, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(createSportActivityThunk.rejected, (state) => {
+        state.loading = false;
+      })
       .addCase(deleteSportActivityThunk.pending, (state) => {
         state.loading = true;
       })
