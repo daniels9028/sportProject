@@ -63,7 +63,6 @@ const ModalCreateSportActivity = ({
       return;
     }
 
-    console.log(selectedItem);
     const action = selectedItem
       ? updateSportActivityThunk
       : createSportActivityThunk;
