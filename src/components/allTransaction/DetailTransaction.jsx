@@ -22,74 +22,89 @@ const DetailTransaction = () => {
 
   const dispatch = useDispatch();
 
-  const handleCloseModal = () => dispatch(clearSelectedItem());
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    actionType: "",
+    transactionId: null,
+  });
 
-  const handleCancelTransaction = (id) => {
-    dispatch(cancelTransactionThunk({ id: id }))
-      .unwrap()
-      .then(() => {
-        toast("Cancel Transaction Successfully", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        });
-
-        dispatch(allTransactionThunk({ page: currentPage }));
-        dispatch(clearSelectedItem());
-      })
-      .catch((response) =>
-        toast(response.message, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        })
-      );
+  const openConfirmModal = (actionType, id) => {
+    setConfirmModal({ isOpen: true, actionType, transactionId: id });
   };
 
-  const handleUpdateStatus = (id) => {
-    dispatch(updateStatusThunk({ id: id }))
-      .unwrap()
-      .then(() => {
-        toast("Confirmation Transaction Successfully", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        });
+  const closeConfirmModal = () => {
+    setConfirmModal({ isOpen: false, actionType: "", transactionId: null });
+  };
 
-        dispatch(allTransactionThunk({ page: currentPage }));
-        dispatch(clearSelectedItem());
-      })
-      .catch((response) =>
-        toast(response.message, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
+  const handleCloseModal = () => dispatch(clearSelectedItem());
+
+  const handleConfirmAction = () => {
+    if (confirmModal.actionType === "confirm") {
+      dispatch(updateStatusThunk({ id: confirmModal.transactionId }))
+        .unwrap()
+        .then(() => {
+          toast("Confirmation Transaction Successfully", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+          });
+
+          dispatch(allTransactionThunk({ page: currentPage }));
+          dispatch(clearSelectedItem());
         })
-      );
+        .catch((response) =>
+          toast(response.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+          })
+        );
+    } else if (confirmModal.actionType === "cancel") {
+      dispatch(cancelTransactionThunk({ id: confirmModal.transactionId }))
+        .unwrap()
+        .then(() => {
+          toast("Cancel Transaction Successfully", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+          });
+
+          dispatch(allTransactionThunk({ page: currentPage }));
+          dispatch(clearSelectedItem());
+        })
+        .catch((response) =>
+          toast(response.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+          })
+        );
+    }
+    closeConfirmModal();
   };
 
   return (
@@ -227,7 +242,9 @@ const DetailTransaction = () => {
                           whileTap={{ scale: 0.95 }}
                           className="flex items-center gap-2 bg-black text-white border-[3px] border-black px-6 py-3 text-lg font-bold uppercase shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:bg-yellow-400 hover:text-black transition-all duration-300"
                           disabled={loading}
-                          onClick={() => handleUpdateStatus(selectedItem?.id)}
+                          onClick={() =>
+                            openConfirmModal("confirm", selectedItem?.id)
+                          }
                         >
                           <Pencil size={20} />
                           Confirm Transaction
@@ -238,7 +255,7 @@ const DetailTransaction = () => {
                           className="flex items-center gap-2 bg-red-600 text-white border-[3px] border-black px-6 py-3 text-lg font-bold uppercase shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:bg-white hover:text-red-600 transition-all duration-300"
                           disabled={loading}
                           onClick={() =>
-                            handleCancelTransaction(selectedItem?.id)
+                            openConfirmModal("cancel", selectedItem?.id)
                           }
                         >
                           <Trash size={20} />
@@ -253,6 +270,59 @@ const DetailTransaction = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Confirmation Modal */}
+      {confirmModal.isOpen && (
+        <motion.div className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="bg-white border-[8px] border-black shadow-[20px_20px_0px_rgba(0,0,0,1)] p-10 text-center max-w-sm w-full relative"
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeConfirmModal}
+              className="absolute top-3 right-3 bg-black text-white p-2 border-2 border-black hover:bg-red-600 transition-all"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Modal Content */}
+            <p className="text-3xl font-extrabold uppercase mb-6 tracking-widest">
+              {confirmModal.actionType === "cancel"
+                ? "Cancel Transaction?"
+                : "Confirm Transaction?"}
+            </p>
+
+            {/* Button Actions */}
+            <div className="flex justify-between gap-4">
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: "-2deg" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleConfirmAction}
+                className={`flex-1 py-4 font-bold uppercase border-[4px] border-black shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all ${
+                  confirmModal.actionType === "cancel"
+                    ? "bg-red-600 text-white hover:bg-white hover:text-red-600"
+                    : "bg-yellow-400 text-black hover:bg-black hover:text-yellow-400"
+                }`}
+              >
+                Yes
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: "2deg" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={closeConfirmModal}
+                className="flex-1 py-4 font-bold uppercase bg-black text-white border-[4px] border-black shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:bg-white hover:text-black transition-all"
+              >
+                No
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </>
   );
 };
