@@ -1,6 +1,6 @@
 import React from "react";
 
-const DetailSportActivity = ({ label, value }) => {
+const DetailList = ({ label, value }) => {
   return (
     <div className="flex flex-col">
       <p className="font-bold text-base uppercase">{label}</p>
@@ -9,4 +9,4 @@ const DetailSportActivity = ({ label, value }) => {
   );
 };
 
-export default DetailSportActivity;
+export default DetailList;

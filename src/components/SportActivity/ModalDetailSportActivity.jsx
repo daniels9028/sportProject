@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSelectedItem } from "../../features/activity/activitySlice";
 import { Pencil, Trash, X } from "lucide-react";
-import DetailSportActivity from "./DetailSportActivity";
+import DetailSportActivity from "../DetailList";
 import {
   deleteSportActivityThunk,
   sportActivitiesThunk,

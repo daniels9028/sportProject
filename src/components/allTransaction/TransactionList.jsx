@@ -1,14 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { sportActivityByIdThunk } from "../../features/activity/activityThunks";
+import { transactionByIdThunk } from "../../features/transaction/transactionThunks";
 import { useDispatch } from "react-redux";
 import DetailList from "../DetailList";
 import { formatCurreny } from "../../utils/formatCurreny";
 
-const SportActivityList = ({ item, index }) => {
+const TransactionList = ({ item, index }) => {
   const dispatch = useDispatch();
 
-  const handleCardClick = (id) => dispatch(sportActivityByIdThunk(id));
+  const handleCardClick = (id) => dispatch(transactionByIdThunk(id));
 
   return (
     <motion.div
@@ -26,20 +26,26 @@ const SportActivityList = ({ item, index }) => {
         {item?.title}
       </h3>
       <div className="flex gap-3 flex-col">
+        <DetailList label="Invoice" value={item?.invoice_id} />
         <DetailList
-          label="Kategori"
-          value={item?.sport_category?.name || "N/A"}
+          label="Total"
+          value={`Rp. ${formatCurreny(item?.total_amount)}`}
         />
-        <DetailList label="Harga" value={`Rp. ${formatCurreny(item?.price)}`} />
-        <DetailList label="Slot" value={item?.slot} />
-        <DetailList label="Lokasi" value={item?.address} />
+        <DetailList label="Order Date" value={item?.order_date} />
+        <DetailList label="Expired Date" value={item?.expired_date} />
         <DetailList
-          label="Tanggal"
-          value={`${item?.activity_date} | ${item?.start_time} - ${item?.end_time}`}
+          label="Status"
+          value={`${
+            item?.status === "success"
+              ? "Success"
+              : item?.status === "cancelled"
+              ? "Cancelled"
+              : "Pending"
+          }`}
         />
       </div>
     </motion.div>
   );
 };
 
-export default SportActivityList;
+export default TransactionList;

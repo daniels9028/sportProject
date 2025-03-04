@@ -16,14 +16,14 @@ const myTransactionRequest = async (credentials) => {
 
 const allTransactionsRequest = async (credentials) => {
   const response = await axios.get(
-    `all-transaction?is_paginate=${credentials.paginate}&per_page=${credentials.limit}&page=${credentials.page}&search`
+    `all-transaction?is_paginate=true&per_page=5&page=${credentials.page}&search`
   );
 
   return response;
 };
 
 const transactionByIdRequest = async (credentials) => {
-  const response = await axios.get(`transaction/${credentials.id}`);
+  const response = await axios.get(`transaction/${credentials}`);
 
   return response;
 };

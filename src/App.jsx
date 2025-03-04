@@ -6,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import AdminPage from "./pages/AdminPage";
 import SportCategoryPage from "./pages/SportCategoryPage";
 import SportActivityPage from "./pages/SportActivityPage";
+import AdminTransactionPage from "./pages/AdminTransactionPage";
 
 const App = () => {
   return (
@@ -18,6 +19,10 @@ const App = () => {
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/sport-category" element={<SportCategoryPage />} />
           <Route path="/admin/sport-activity" element={<SportActivityPage />} />
+          <Route
+            path="/admin/all-transaction"
+            element={<AdminTransactionPage />}
+          />
         </Route>
       </Routes>
     </Router>

@@ -49,15 +49,17 @@ const AdminPage = () => {
         </motion.div>
 
         <motion.div whileHover={{ scale: 1.05 }} className="cursor-pointer">
-          <Card className="rounded-2xl shadow-md bg-white">
-            <CardContent className="p-6 flex flex-col items-center gap-4">
-              <Settings className="w-12 h-12 text-gray-700" />
-              <h2 className="text-xl font-semibold">Transaction</h2>
-              <p className="text-gray-500 text-center">
-                Add, track, and cancel transaction
-              </p>
-            </CardContent>
-          </Card>
+          <Link to="/admin/all-transaction">
+            <Card className="rounded-2xl shadow-md bg-white">
+              <CardContent className="p-6 flex flex-col items-center gap-4">
+                <Settings className="w-12 h-12 text-gray-700" />
+                <h2 className="text-xl font-semibold">Transaction</h2>
+                <p className="text-gray-500 text-center">
+                  Add, track, and cancel transaction
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
         </motion.div>
       </main>
     </div>

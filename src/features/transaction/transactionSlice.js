@@ -16,7 +16,9 @@ const initialState = {
   myTransaction: [],
   error: null,
   loading: false,
-  selectedTransaction: null,
+  selectedItem: null,
+  allTransactionCurrentPage: 1,
+  allTransactionTotalPages: 1,
 };
 
 const transactionSlice = createSlice({
@@ -25,6 +27,19 @@ const transactionSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(allTransactionThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(allTransactionThunk.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allTransaction = payload.result.data;
+        state.allTransactionCurrentPage = payload.result.current_page;
+        state.allTransactionTotalPages = payload.result.last_page;
+      })
+      .addCase(allTransactionThunk.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      })
       .addCase(myTransactionThunk.pending, (state) => {
         state.loading = true;
       })
@@ -36,16 +51,12 @@ const transactionSlice = createSlice({
         state.loading = false;
         state.error = payload;
       })
-      .addCase(allTransactionThunk.pending, (state) => {
+      .addCase(transactionByIdThunk.pending, (state) => {
         state.loading = true;
       })
-      .addCase(allTransactionThunk.fulfilled, (state, { payload }) => {
+      .addCase(transactionByIdThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        console.log(payload);
-      })
-      .addCase(allTransactionThunk.rejected, (state, { payload }) => {
-        state.loading = false;
-        state.error = payload;
+        state.selectedItem = payload.result;
       });
   },
 });
