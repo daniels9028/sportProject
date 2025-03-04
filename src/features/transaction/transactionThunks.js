@@ -81,7 +81,7 @@ export const updateStatusThunk = createAsyncThunk(
   "transaction/update-status",
   async (credentials, thunkAPI) => {
     try {
-      const { data } = await transactionServices.updateProofPaymentUrlRequest(
+      const { data } = await transactionServices.updateStatusRequest(
         credentials
       );
 

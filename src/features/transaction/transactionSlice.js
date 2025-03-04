@@ -17,6 +17,7 @@ const initialState = {
   error: null,
   loading: false,
   selectedItem: null,
+  selectedLoading: false,
   allTransactionCurrentPage: 1,
   allTransactionTotalPages: 1,
 };
@@ -24,7 +25,12 @@ const initialState = {
 const transactionSlice = createSlice({
   name: "transaction",
   initialState,
-  reducers: {},
+  reducers: {
+    clearSelectedItem: (state) => {
+      state.selectedItem = null;
+      state.selectedLoading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(allTransactionThunk.pending, (state) => {
@@ -52,13 +58,29 @@ const transactionSlice = createSlice({
         state.error = payload;
       })
       .addCase(transactionByIdThunk.pending, (state) => {
-        state.loading = true;
+        state.selectedLoading = true;
       })
       .addCase(transactionByIdThunk.fulfilled, (state, { payload }) => {
-        state.loading = false;
+        state.selectedLoading = false;
         state.selectedItem = payload.result;
+      })
+      .addCase(transactionByIdThunk.rejected, (state, { payload }) => {
+        state.selectedLoading = false;
+      })
+      .addCase(updateStatusThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateStatusThunk.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(cancelTransactionThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(cancelTransactionThunk.fulfilled, (state) => {
+        state.loading = false;
       });
   },
 });
 
+export const { clearSelectedItem } = transactionSlice.actions;
 export default transactionSlice.reducer;

@@ -16,7 +16,7 @@ const myTransactionRequest = async (credentials) => {
 
 const allTransactionsRequest = async (credentials) => {
   const response = await axios.get(
-    `all-transaction?is_paginate=true&per_page=5&page=${credentials.page}&search`
+    `all-transaction?is_paginate=true&per_page=15&page=${credentials.page}&search`
   );
 
   return response;
@@ -40,17 +40,16 @@ const updateProofPaymentUrlRequest = async (credentials) => {
 const updateStatusRequest = async (credentials) => {
   const response = await axios.post(
     `transaction/update-status/${credentials.id}`,
-    credentials
+    { status: "success" }
   );
 
   return response;
 };
 
 const cancelTransactionRequest = async (credentials) => {
-  const response = await axios.post(
-    `transaction/cancel/${credentials.id}`,
-    credentials
-  );
+  const response = await axios.post(`transaction/cancel/${credentials.id}`, {
+    status: "success",
+  });
 
   return response;
 };

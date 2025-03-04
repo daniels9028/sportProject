@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { allTransactionThunk } from "../features/transaction/transactionThunks";
 import TransactionList from "../components/allTransaction/TransactionList";
 import TransactionPagination from "../components/allTransaction/TransactionPagination";
+import DetailTransaction from "../components/allTransaction/DetailTransaction";
 
 const AdminTransactionPage = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const AdminTransactionPage = () => {
 
         <TransactionPagination />
 
+        <DetailTransaction />
         {/* Modal */}
         {/* <ModalDetailSportActivity />
 
