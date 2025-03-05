@@ -1,12 +1,15 @@
 import React from "react";
 import Modal from "./Modal";
 import InputField from "./InputField";
+import { updateUserThunk } from "../features/profile/profileThunks";
 import { useForm } from "react-hook-form";
 import { profileSchema } from "../formSchema/profileSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const ModalUpdateProfile = ({ isOpen, onClose, title }) => {
+  const dispatch = useDispatch();
+
   const { user, loading } = useSelector((state) => state.profile);
 
   const {
@@ -18,7 +21,6 @@ const ModalUpdateProfile = ({ isOpen, onClose, title }) => {
   } = useForm({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      email: user?.email,
       name: user?.name,
       password: "",
       c_password: "",
@@ -33,19 +35,21 @@ const ModalUpdateProfile = ({ isOpen, onClose, title }) => {
       return;
     }
 
-    console.log(result);
+    const filteredData = Object.keys(result.data).reduce((acc, key) => {
+      if (data[key] !== "" && data[key] !== 0) {
+        acc[key] = data[key];
+      }
+      return acc;
+    }, {});
+
+    dispatch(
+      updateUserThunk({ id: user?.id, ...filteredData, role: user?.role })
+    );
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title}>
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-        <InputField
-          type="email"
-          label="Email"
-          name="email"
-          register={register}
-          errors={errors.email}
-        />
         <InputField
           type="text"
           label="Name"

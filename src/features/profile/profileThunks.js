@@ -3,12 +3,9 @@ import profileServices from "../../api/profileServices";
 
 export const updateUserThunk = createAsyncThunk(
   "profile/update-user",
-  async ({ userId, credential }, thunkAPI) => {
+  async (credentials, thunkAPI) => {
     try {
-      const { data } = await profileServices.updateUserRequest(
-        userId,
-        credential
-      );
+      const { data } = await profileServices.updateUserRequest(credentials);
 
       return data;
     } catch (error) {

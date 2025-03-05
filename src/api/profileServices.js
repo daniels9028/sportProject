@@ -1,7 +1,10 @@
 import axios from "../axios/axios";
 
-const updateUserRequest = async (userId, credentials) => {
-  const response = await axios.post(`update-user/${userId}`, credentials);
+const updateUserRequest = async (credentials) => {
+  const response = await axios.post(
+    `update-user/${credentials.id}`,
+    credentials
+  );
 
   return response;
 };

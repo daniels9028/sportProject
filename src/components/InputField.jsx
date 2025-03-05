@@ -13,6 +13,9 @@ const InputField = ({
 
   return (
     <div className={classnameHeader}>
+      <label htmlFor={name} className="block font-bold text-gray-800 mb-1">
+        {label}
+      </label>
       <div className="relative">
         <input
           type={type === "password" && showPassword ? "text" : type}

@@ -21,7 +21,8 @@ const profileSlice = createSlice({
       })
       .addCase(updateUserThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        // state.user = payload.result;
+        state.user = payload.result;
+        localStorage.setItem("user", JSON.stringify(payload.result));
       })
       .addCase(updateUserThunk.rejected, (state, { payload }) => {
         state.loading = false;
