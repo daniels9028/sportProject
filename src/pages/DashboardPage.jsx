@@ -1,10 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "../components/Button";
 import { Card, CardContent } from "../components/Card";
-import { Menu, X } from "lucide-react";
+
 import { categoriesThunk } from "../features/category/categoryThunks";
+import DashboardNavbar from "../components/DashboardNavbar";
+import { ToastContainer } from "react-toastify";
 
 const news = [
   {
@@ -25,10 +27,6 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => setIsOpen(!isOpen);
-
   useEffect(() => {
     if (user?.role === "admin") navigate("/admin");
   }, [user, navigate]);
@@ -39,64 +37,9 @@ const DashboardPage = () => {
 
   return (
     <div className="bg-white min-h-screen font-mono text-black">
+      <ToastContainer />
       {/* Header */}
-      <header className="border-b-4 border-black bg-gray-100 uppercase px-6 py-6 md:px-12">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tighter">
-            Sport News
-          </h1>
-
-          {/* Burger Icon for Mobile */}
-          <button
-            className="lg:hidden border-2 border-black p-2"
-            onClick={toggleMenu}
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-
-          {/* Desktop Menu */}
-          <nav className="hidden lg:flex flex-wrap justify-center gap-8 text-base lg:text-lg">
-            {["Home", "Category", "Explore", "About"].map((item) => (
-              <a
-                key={item}
-                href="#"
-                className="hover:underline underline-offset-4 decoration-2"
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-
-          <Link
-            to="/login"
-            className="cursor-pointer hidden lg:block border-2 border-black bg-black text-white px-6 py-2 hover:bg-gray-800 transition"
-          >
-            Login
-          </Link>
-        </div>
-
-        {/* Mobile Menu */}
-        {isOpen && (
-          <nav className="flex flex-col justify-center items-center w-full gap-4 mt-4 lg:hidden">
-            {["Home", "Category", "Explore", "About"].map((item) => (
-              <a
-                key={item}
-                href="#"
-                className="hover:underline underline-offset-4 decoration-2"
-              >
-                {item}
-              </a>
-            ))}
-            <Link
-              to="/login"
-              className="border-2 w-full border-black bg-black text-white px-6 py-2 hover:bg-gray-800 transition cursor-pointer"
-            >
-              Login
-            </Link>
-          </nav>
-        )}
-      </header>
-
+      <DashboardNavbar />
       {/* Hero Section */}
       <section className="relative bg-white py-12 px-6 md:py-20 md:px-12 text-left border-y-4 border-black">
         <h2 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight uppercase max-w-3xl md:max-w-4xl">
