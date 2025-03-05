@@ -6,6 +6,25 @@ import { motion } from "framer-motion";
 import { Bounce, toast } from "react-toastify";
 import { logoutThunk } from "../features/auth/authThunks";
 
+const menus = [
+  {
+    label: "HOME",
+    link: "/",
+  },
+  {
+    label: "CATEGORY",
+    link: "/",
+  },
+  {
+    label: "EXPLORE",
+    link: "/",
+  },
+  {
+    label: "ABOUT",
+    link: "/",
+  },
+];
+
 const DashboardNavbar = () => {
   const { user } = useSelector((state) => state.profile);
 
@@ -65,13 +84,13 @@ const DashboardNavbar = () => {
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex flex-wrap justify-center gap-12 text-lg font-bold">
-          {["Home", "Category", "Explore", "About"].map((item) => (
+          {menus.map((item) => (
             <a
-              key={item}
-              href="#"
+              key={item.label}
+              href={item.link}
               className="relative group hover:text-gray-800"
             >
-              {item}
+              {item.label}
               <span className="absolute left-0 bottom-0 w-0 h-1 bg-black transition-all group-hover:w-full"></span>
             </a>
           ))}
@@ -126,13 +145,13 @@ const DashboardNavbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <nav className="flex flex-col items-center w-full gap-6 mt-6 lg:hidden border-t-4 border-black pt-6 bg-gray-100">
-          {["Home", "Category", "Explore", "About"].map((item) => (
+          {menus.map((item) => (
             <a
-              key={item}
-              href="#"
+              key={item.label}
+              href={item.link}
               className="text-xl font-bold hover:text-gray-800"
             >
-              {item}
+              {item.label}
             </a>
           ))}
           {user ? (
