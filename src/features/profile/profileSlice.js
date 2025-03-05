@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { updateUserThunk, myProfileThunk } from "./profileThunks";
+import { logoutThunk } from "../auth/authThunks";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
@@ -37,6 +38,10 @@ const profileSlice = createSlice({
       .addCase(myProfileThunk.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
+      })
+      .addCase(logoutThunk.fulfilled, (state, { payload }) => {
+        state.user = null;
+        localStorage.removeItem("user");
       });
   },
 });
