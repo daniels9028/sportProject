@@ -8,6 +8,7 @@ import SportCategoryPage from "./pages/SportCategoryPage";
 import SportActivityPage from "./pages/SportActivityPage";
 import AdminTransactionPage from "./pages/AdminTransactionPage";
 import ProfilePage from "./pages/ProfilePage";
+import MyTransactionPage from "./pages/MyTransactionPage";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/" element={<DashboardPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/transactions" element={<MyTransactionPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/sport-category" element={<SportCategoryPage />} />
           <Route path="/admin/sport-activity" element={<SportActivityPage />} />

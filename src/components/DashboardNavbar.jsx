@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Menu, User, X, LogOut, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Link as LINK } from "react-scroll";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { Bounce, toast } from "react-toastify";
@@ -10,18 +11,22 @@ const menus = [
   {
     label: "HOME",
     link: "/",
+    id: "home",
   },
   {
     label: "CATEGORY",
     link: "/",
+    id: "category",
   },
   {
     label: "EXPLORE",
     link: "/",
+    id: "explore",
   },
   {
     label: "ABOUT",
     link: "/",
+    id: "about",
   },
 ];
 
@@ -68,11 +73,14 @@ const DashboardNavbar = () => {
   };
 
   return (
-    <header className="border-b-4 border-black bg-gray-100 px-6 py-6 md:px-12 uppercase">
+    <header className="border-b-4 border-black bg-gray-100 px-6 py-6 md:px-12 uppercase fixed top-0 left-0 w-full z-50">
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-extrabold tracking-tight bg-black text-white px-3 py-1">
+        <Link
+          to="/"
+          className="text-4xl font-extrabold tracking-tight bg-black text-white px-3 py-1 cursor-pointer"
+        >
           SPORT NEWS
-        </h1>
+        </Link>
 
         {/* Burger Icon for Mobile */}
         <button
@@ -85,14 +93,17 @@ const DashboardNavbar = () => {
         {/* Desktop Menu */}
         <nav className="hidden lg:flex flex-wrap justify-center gap-12 text-lg font-bold">
           {menus.map((item) => (
-            <a
+            <LINK
               key={item.label}
-              href={item.link}
-              className="relative group hover:text-gray-800"
+              smooth={true}
+              duration={500}
+              offset={-80}
+              to={item.id}
+              className="relative group hover:text-gray-800 cursor-pointer"
             >
               {item.label}
               <span className="absolute left-0 bottom-0 w-0 h-1 bg-black transition-all group-hover:w-full"></span>
-            </a>
+            </LINK>
           ))}
         </nav>
 

@@ -8,7 +8,7 @@ const createTransactionRequest = async (credentials) => {
 
 const myTransactionRequest = async (credentials) => {
   const response = await axios.get(
-    `my-transaction?is_paginate=${credentials.paginate}&per_page=${credentials.limit}&page=${credentials.page}&search`
+    `my-transaction?is_paginate=true&per_page=15&page=${credentials.page}&search`
   );
 
   return response;

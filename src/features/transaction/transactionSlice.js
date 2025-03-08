@@ -20,6 +20,8 @@ const initialState = {
   selectedLoading: false,
   allTransactionCurrentPage: 1,
   allTransactionTotalPages: 1,
+  myTransactionCurrentPage: 1,
+  myTransactionTotalPages: 1,
 };
 
 const transactionSlice = createSlice({
@@ -51,7 +53,9 @@ const transactionSlice = createSlice({
       })
       .addCase(myTransactionThunk.fulfilled, (state, { payload }) => {
         state.loading = false;
-        console.log(payload);
+        state.myTransaction = payload.result.data;
+        state.myTransactionCurrentPage = payload.result.current_page;
+        state.myTransactionTotalPages = payload.result.last_page;
       })
       .addCase(myTransactionThunk.rejected, (state, { payload }) => {
         state.loading = false;
