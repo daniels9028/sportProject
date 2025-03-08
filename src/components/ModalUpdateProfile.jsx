@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { profileSchema } from "../formSchema/profileSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
+import { Bounce, toast } from "react-toastify";
 
 const ModalUpdateProfile = ({ isOpen, onClose, title }) => {
   const dispatch = useDispatch();
@@ -44,7 +45,36 @@ const ModalUpdateProfile = ({ isOpen, onClose, title }) => {
 
     dispatch(
       updateUserThunk({ id: user?.id, ...filteredData, role: user?.role })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        toast("Update profile successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
+
+        onClose();
+      })
+      .catch(() => {
+        toast("Update profile failed", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
+      });
   };
 
   return (
