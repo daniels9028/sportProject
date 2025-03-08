@@ -1,30 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Button } from "../components/Button";
 import { Card, CardContent } from "../components/Card";
 
 import { categoriesThunk } from "../features/category/categoryThunks";
+import { sportActivitiesThunk } from "../features/activity/activityThunks";
+import SportActivityList from "../components/SportActivity/SportActivityList";
 import DashboardNavbar from "../components/DashboardNavbar";
 import { ToastContainer } from "react-toastify";
 import { Element } from "react-scroll";
 
-const news = [
-  {
-    title: "Ethiopian runners took the top four spots",
-    date: "Feb 24, 2025",
-    image: "/images/runners.jpg",
-  },
-  {
-    title: "IndyCar Detroit: Dixon qualifies in second practice",
-    date: "Feb 24, 2025",
-    image: "/images/indycar.jpg",
-  },
-];
-
 const DashboardPage = () => {
-  const { user } = useSelector((state) => state.profile);
-  const { category } = useSelector((state) => state.category);
+  const { user, category, activity } = useSelector((state) => ({
+    user: state.profile.user,
+    category: state.category.category,
+    activity: state.activity.activity,
+  }));
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -34,7 +27,10 @@ const DashboardPage = () => {
 
   useEffect(() => {
     dispatch(categoriesThunk());
+    dispatch(sportActivitiesThunk());
   }, []);
+
+  console.log(activity);
 
   return (
     <div className="bg-white min-h-screen font-mono text-black">
@@ -56,25 +52,6 @@ const DashboardPage = () => {
           </Button>
         </section>
       </Element>
-
-      {/* Trending Section */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 md:px-12 py-12 md:py-16 border-b-4 border-black bg-gray-50 mt-12">
-        {news.map((item, index) => (
-          <Card key={index} className="border-2 border-black bg-white">
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-48 object-cover"
-            />
-            <CardContent className="p-4 md:p-6">
-              <p className="text-sm uppercase text-gray-600">{item.date}</p>
-              <h3 className="text-lg md:text-xl font-semibold mt-2 uppercase leading-snug">
-                {item.title}
-              </h3>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
 
       {/* Category Section */}
       <Element name="category">
@@ -101,6 +78,25 @@ const DashboardPage = () => {
               </Card>
             ))}
           </div>
+        </section>
+      </Element>
+
+      {/* Explore Section */}
+      <Element name="explore">
+        <section className="px-6 md:px-12 py-12 md:py-16 bg-white border-b-4 border-black mt-12">
+          <h2 className="text-2xl md:text-4xl font-bold uppercase text-center">
+            Explore
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 md:px-12 py-12 md:py-16 border-black bg-gray-50 mt-10">
+            {activity?.map((item, index) => (
+              <SportActivityList item={item} key={item.id} index={index} />
+            ))}
+          </div>
+          <Link className="flex items-center justify-center" to="/explore">
+            <button className="mt-10 bg-black text-white text-xl font-bold uppercase tracking-wider border-4 border-white px-6 py-4 shadow-[6px_6px_0px_#fff] hover:bg-white hover:text-black hover:border-black hover:shadow-[6px_6px_0px_#000] active:translate-y-1 transition-all cursor-pointer">
+              Explore More...
+            </button>
+          </Link>
         </section>
       </Element>
 
