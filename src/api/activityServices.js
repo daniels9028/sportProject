@@ -1,7 +1,6 @@
 import axios from "../axios/axios";
 
 const sportActivitiesRequest = async (credentials) => {
-  console.log(credentials);
   const response = await axios.get(
     `sport-activities?is_paginate=true&per_page=6&page=${
       credentials?.page

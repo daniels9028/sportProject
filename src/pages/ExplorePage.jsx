@@ -9,6 +9,7 @@ import ExploreList from "../components/ExploreList";
 import ExplorePagination from "../components/ExplorePagination";
 import { setPaginate } from "../features/category/categorySlice";
 import {
+  clearSelectedCategoryAndCity,
   setSelectedCategory,
   setSelectedCity,
 } from "../features/activity/activitySlice";
@@ -34,6 +35,7 @@ const ExplorePage = () => {
   }));
 
   useEffect(() => {
+    dispatch(clearSelectedCategoryAndCity());
     dispatch(setPaginate({ paginate: false, limit: 100 }));
     dispatch(sportActivitiesThunk({ page: currentPage }));
     dispatch(citiesThunk());
@@ -46,6 +48,14 @@ const ExplorePage = () => {
   }, [paginate, limit]);
 
   useEffect(() => {
+    if (selectedCategory === null && selectedCity === null) {
+      dispatch(
+        sportActivitiesThunk({
+          page: currentPage,
+        })
+      );
+    }
+
     dispatch(
       sportActivitiesThunk({
         page: currentPage,

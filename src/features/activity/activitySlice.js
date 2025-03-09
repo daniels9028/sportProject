@@ -28,6 +28,10 @@ const activitySlice = createSlice({
       state.selectedItem = null;
       state.selectedLoading = false;
     },
+    clearSelectedCategoryAndCity: (state) => {
+      state.selectedCategory = null;
+      state.selectedCity = null;
+    },
     setSelectedCategory: (state, { payload }) => {
       state.selectedCategory = payload;
     },
@@ -82,6 +86,10 @@ const activitySlice = createSlice({
   },
 });
 
-export const { clearSelectedItem, setSelectedCategory, setSelectedCity } =
-  activitySlice.actions;
+export const {
+  clearSelectedItem,
+  setSelectedCategory,
+  setSelectedCity,
+  clearSelectedCategoryAndCity,
+} = activitySlice.actions;
 export default activitySlice.reducer;
