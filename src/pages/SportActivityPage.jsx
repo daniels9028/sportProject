@@ -21,7 +21,7 @@ const SportActivityPage = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   useEffect(() => {
-    dispatch(sportActivitiesThunk(currentPage));
+    dispatch(sportActivitiesThunk({ page: currentPage }));
   }, [dispatch, currentPage]);
 
   return (

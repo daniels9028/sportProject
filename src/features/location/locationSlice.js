@@ -61,6 +61,19 @@ const locationSlice = createSlice({
       .addCase(citiesByProvinceIdThunk.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
+      })
+      .addCase(citiesThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(citiesThunk.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.cities = payload.result.slice().map((item) => ({
+          value: item.city_id,
+          label: item.city_name_full,
+        }));
+      })
+      .addCase(citiesThunk.rejected, (state, { payload }) => {
+        state.error = payload;
       });
   },
 });

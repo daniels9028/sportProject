@@ -11,13 +11,13 @@ const PaginationSportActivity = () => {
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      dispatch(sportActivitiesThunk(currentPage - 1));
+      dispatch(sportActivitiesThunk({ page: currentPage - 1 }));
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      dispatch(sportActivitiesThunk(currentPage + 1));
+      dispatch(sportActivitiesThunk({ page: currentPage + 1 }));
     }
   };
 

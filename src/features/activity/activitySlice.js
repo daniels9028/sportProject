@@ -28,6 +28,12 @@ const activitySlice = createSlice({
       state.selectedItem = null;
       state.selectedLoading = false;
     },
+    setSelectedCategory: (state, { payload }) => {
+      state.selectedCategory = payload;
+    },
+    setSelectedCity: (state, { payload }) => {
+      state.selectedCity = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -76,5 +82,6 @@ const activitySlice = createSlice({
   },
 });
 
-export const { clearSelectedItem } = activitySlice.actions;
+export const { clearSelectedItem, setSelectedCategory, setSelectedCity } =
+  activitySlice.actions;
 export default activitySlice.reducer;

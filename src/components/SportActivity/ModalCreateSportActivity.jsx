@@ -87,7 +87,7 @@ const ModalCreateSportActivity = ({
           }
         );
 
-        dispatch(sportActivitiesThunk(currentPage));
+        dispatch(sportActivitiesThunk({ page: currentPage }));
         dispatch(setSelectedCategory(null));
         dispatch(setSelectedProvince(null));
         dispatch(setSelectedCity(null));

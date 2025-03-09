@@ -42,7 +42,7 @@ const ModalDetailSportActivity = () => {
           transition: Bounce,
         });
 
-        dispatch(sportActivitiesThunk(currentPage));
+        dispatch(sportActivitiesThunk({ page: currentPage }));
         dispatch(clearSelectedItem());
       })
       .catch((response) =>

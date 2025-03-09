@@ -12,11 +12,9 @@ import { ToastContainer } from "react-toastify";
 import { Element } from "react-scroll";
 
 const DashboardPage = () => {
-  const { user, category, activity } = useSelector((state) => ({
-    user: state.profile.user,
-    category: state.category.category,
-    activity: state.activity.activity,
-  }));
+  const user = useSelector((state) => state.profile.user);
+  const category = useSelector((state) => state.category.category);
+  const { activity, currentPage } = useSelector((state) => state.activity);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,10 +25,8 @@ const DashboardPage = () => {
 
   useEffect(() => {
     dispatch(categoriesThunk());
-    dispatch(sportActivitiesThunk());
+    dispatch(sportActivitiesThunk({ page: currentPage }));
   }, []);
-
-  console.log(activity);
 
   return (
     <div className="bg-white min-h-screen font-mono text-black">
