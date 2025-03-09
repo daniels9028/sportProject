@@ -87,7 +87,7 @@ const DashboardPage = () => {
           <h2 className="text-2xl md:text-4xl font-bold uppercase text-center">
             Explore
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 md:px-12 py-12 md:py-16 border-black bg-gray-50 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 md:px-12 py-12 md:py-16 border-black bg-gray-50 mt-10">
             {activity?.map((item, index) => (
               <SportActivityList item={item} key={item.id} index={index} />
             ))}

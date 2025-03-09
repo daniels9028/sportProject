@@ -84,7 +84,7 @@ const DashboardNavbar = () => {
 
         {/* Burger Icon for Mobile */}
         <button
-          className="lg:hidden border-2 border-black p-2 bg-black text-white"
+          className="lg:hidden border-2 border-black p-2 bg-black text-white cursor-pointer"
           onClick={toggleMenu}
         >
           {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -111,7 +111,7 @@ const DashboardNavbar = () => {
           <div className="relative hidden lg:block">
             <button
               onClick={toggleProfileMenu}
-              className="flex items-center gap-3  rounded-full border-black bg-black text-white p-2 hover:bg-gray-800 transition"
+              className="flex items-center gap-3  rounded-full border-black bg-black text-white p-2 hover:bg-gray-800 transition cursor-pointer"
             >
               <User size={22} />
             </button>
@@ -135,7 +135,7 @@ const DashboardNavbar = () => {
                   <FileText size={18} /> Transactions
                 </Link>
                 <button
-                  className="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-gray-800"
+                  className="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-gray-800 cursor-pointer"
                   onClick={handleLogout}
                 >
                   <LogOut size={18} /> Logout
@@ -157,19 +157,24 @@ const DashboardNavbar = () => {
       {isOpen && (
         <nav className="flex flex-col items-center w-full gap-6 mt-6 lg:hidden border-t-4 border-black pt-6 bg-gray-100">
           {menus.map((item) => (
-            <a
+            <LINK
               key={item.label}
-              href={item.link}
-              className="text-xl font-bold hover:text-gray-800"
+              smooth={true}
+              duration={500}
+              offset={-80}
+              to={item.id}
+              onClick={toggleMenu}
+              className="text-xl font-bold hover:text-gray-800 cursor-pointer"
             >
               {item.label}
-            </a>
+              <span className="absolute left-0 bottom-0 w-0 h-1 bg-black transition-all group-hover:w-full"></span>
+            </LINK>
           ))}
           {user ? (
             <div className="flex flex-col w-full text-center border-t-4 border-black pt-4">
               <button
                 onClick={toggleProfileMenu}
-                className="flex items-center gap-2 justify-center border-2 border-black bg-black text-white px-6 py-2 hover:bg-gray-800 transition"
+                className="flex items-center gap-2 justify-center border-2 border-black bg-black text-white px-6 py-2 hover:bg-gray-800 transition cursor-pointer"
               >
                 <User size={22} /> PROFILE
               </button>
@@ -193,7 +198,7 @@ const DashboardNavbar = () => {
                     <FileText size={18} /> Transactions
                   </Link>
                   <button
-                    className="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-gray-800"
+                    className="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-gray-800 cursor-pointer"
                     onClick={handleLogout}
                   >
                     <LogOut size={18} /> Logout

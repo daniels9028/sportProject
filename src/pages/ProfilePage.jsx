@@ -18,7 +18,7 @@ const ProfilePage = () => {
       <ToastContainer />
       <DashboardNavbar />
 
-      <div className="px-6">
+      <div className="px-6 mt-32">
         <div className="max-w-3xl mx-auto text-white bg-black border-4 border-white shadow-[12px_12px_0_0_black] p-12 my-16 relative">
           <h1 className="lg:text-7xl text-xl font-extrabold mb-10 uppercase border-b-4 border-white pb-3 tracking-widest">
             Profile

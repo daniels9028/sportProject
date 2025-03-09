@@ -16,6 +16,8 @@ const initialState = {
   loading: false,
   selectedItem: null,
   selectedLoading: false,
+  selectedCategory: null,
+  selectedCity: null,
 };
 
 const activitySlice = createSlice({
