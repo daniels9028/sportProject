@@ -4,6 +4,7 @@ import { paymentMethodsThunk } from "./paymentThunks";
 
 const initialState = {
   payment: [],
+  selectedPayment: {},
   error: null,
   loading: false,
 };
@@ -11,7 +12,14 @@ const initialState = {
 const paymentSlice = createSlice({
   name: "payment",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedPayment: (state, { payload }) => {
+      state.selectedPayment = payload;
+    },
+    clearSelectedPayment: (state) => {
+      state.selectedPayment = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(paymentMethodsThunk.pending, (state) => {
@@ -27,4 +35,6 @@ const paymentSlice = createSlice({
   },
 });
 
+export const { setSelectedPayment, clearSelectedPayment } =
+  paymentSlice.actions;
 export default paymentSlice.reducer;

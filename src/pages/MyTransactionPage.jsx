@@ -14,7 +14,6 @@ const MyTransactionPage = () => {
     dispatch(myTransactionThunk({ page: myTransactionCurrentPage }));
   }, []);
 
-  console.log(myTransaction);
   return (
     <div className="bg-white min-h-screen font-mono relative">
       <ToastContainer />

@@ -35,6 +35,15 @@ const transactionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(createTransactionThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createTransactionThunk.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(createTransactionThunk.rejected, (state) => {
+        state.loading = false;
+      })
       .addCase(allTransactionThunk.pending, (state) => {
         state.loading = true;
       })
