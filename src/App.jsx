@@ -10,6 +10,7 @@ import AdminTransactionPage from "./pages/AdminTransactionPage";
 import ProfilePage from "./pages/ProfilePage";
 import MyTransactionPage from "./pages/MyTransactionPage";
 import ExplorePage from "./pages/ExplorePage";
+import DetailMyTransactionPage from "./pages/DetailMyTransactionPage";
 
 const App = () => {
   return (
@@ -21,6 +22,10 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/transactions" element={<MyTransactionPage />} />
+          <Route
+            path="/transaction/:id"
+            element={<DetailMyTransactionPage />}
+          />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/sport-category" element={<SportCategoryPage />} />

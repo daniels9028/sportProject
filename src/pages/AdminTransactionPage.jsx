@@ -9,9 +9,12 @@ import DetailTransaction from "../components/allTransaction/DetailTransaction";
 const AdminTransactionPage = () => {
   const dispatch = useDispatch();
 
-  const { allTransaction, allTransactionCurrentPage } = useSelector(
-    (state) => state.transaction
-  );
+  const {
+    allTransaction,
+    allTransactionCurrentPage,
+    allTransactionTotalPages,
+    loading,
+  } = useSelector((state) => state.transaction);
 
   useEffect(() => {
     dispatch(allTransactionThunk({ page: allTransactionCurrentPage }));
@@ -30,7 +33,12 @@ const AdminTransactionPage = () => {
           ))}
         </div>
 
-        <TransactionPagination />
+        <TransactionPagination
+          currentPage={allTransactionCurrentPage}
+          totalPages={allTransactionTotalPages}
+          transactionThunk={allTransactionThunk}
+          loading={loading}
+        />
 
         <DetailTransaction />
         {/* Modal */}

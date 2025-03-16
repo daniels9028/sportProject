@@ -42,7 +42,7 @@ const AdminNavbar = () => {
         Admin Dashboard
       </h1>
       <button
-        className="bg-black text-white border-2 border-black rounded-md px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg font-bold hover:bg-white hover:text-black hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ease-in-out w-full sm:w-auto"
+        className="bg-black text-white border-2 border-black rounded-md px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg font-bold hover:bg-white hover:text-black hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ease-in-out w-full sm:w-auto cursor-pointer"
         onClick={handleLogout}
       >
         Logout

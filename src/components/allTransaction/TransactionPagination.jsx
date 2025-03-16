@@ -1,27 +1,25 @@
 import React from "react";
 import { Button } from "../Button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { allTransactionThunk } from "../../features/transaction/transactionThunks";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-const TransactionPagination = () => {
-  const {
-    allTransactionCurrentPage: currentPage,
-    allTransactionTotalPages: totalPages,
-    loading,
-  } = useSelector((state) => state.transaction);
-
+const TransactionPagination = ({
+  currentPage,
+  totalPages,
+  transactionThunk,
+  loading,
+}) => {
   const dispatch = useDispatch();
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      dispatch(allTransactionThunk({ page: currentPage - 1 }));
+      dispatch(transactionThunk({ page: currentPage - 1 }));
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      dispatch(allTransactionThunk({ page: currentPage + 1 }));
+      dispatch(transactionThunk({ page: currentPage + 1 }));
     }
   };
 
