@@ -85,8 +85,8 @@ const ExploreDetail = () => {
         setTimeout(() => {
           dispatch(clearSelectedItem());
           dispatch(clearSelectedPayment());
-          navigate("/transactions");
-        }, 3000);
+          navigate(`/transaction/${response?.result?.id}`);
+        }, 2000);
       })
       .catch((response) => {
         toast(response.message, {

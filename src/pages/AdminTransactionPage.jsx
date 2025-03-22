@@ -41,14 +41,6 @@ const AdminTransactionPage = () => {
         />
 
         <DetailTransaction />
-        {/* Modal */}
-        {/* <ModalDetailSportActivity />
-
-        <ModalCreateSportActivity
-          isModalOpen={isModalOpen}
-          onClose={handleCloseModal}
-          title="Input Sport Activity"
-        /> */}
       </div>
     </div>
   );

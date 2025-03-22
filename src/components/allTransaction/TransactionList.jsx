@@ -42,6 +42,13 @@ const TransactionList = ({ item, index }) => {
               ? "Cancelled"
               : "Pending"
           }`}
+          className={`${
+            item?.status === "success"
+              ? "text-green-500"
+              : item?.status === "cancelled"
+              ? "text-red-600"
+              : "text-blue-500"
+          }`}
         />
       </div>
     </motion.div>
